@@ -4,4 +4,5 @@ export  const enum NAME_SCREENS {
     LOGIN_SCREEN = 'LoginScreen' , 
     HOME_SCREEN = 'HomeScreen' , 
     BOTTOM_TAB = 'BottomTab' ,
+    ONBOARDING_SCREEN = 'OnBoardingScreen'
 }
