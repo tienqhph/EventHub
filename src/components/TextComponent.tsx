@@ -4,7 +4,7 @@ import {appColors} from '../constants/appColors';
 import {fonts} from '../constants/fontFamily';
 
 interface Props {
-  text?: string;
+  text: string;
   color?: string;
   size?: number;
   flex?: number;
@@ -22,7 +22,7 @@ const TextComponent = (props: Props) => {
         {},
         {
           color: color ?? appColors.text,
-          fontFamily: font ?? fonts.bold,
+          fontFamily: font ?? fonts.medium,
           fontSize: size ?? tilte? 24: 14,
           flex: flex ?? 0,
         },

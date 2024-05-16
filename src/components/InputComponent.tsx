@@ -6,6 +6,8 @@ import {
   StyleSheet,
   StyleProp,
   ViewStyle,
+  TextInputProps,
+  KeyboardType,
 } from 'react-native';
 import React, {ReactNode, useState} from 'react';
 import {EyeSlash} from 'iconsax-react-native';
@@ -14,17 +16,19 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 interface Props {
-  value: string;
-  onChange: Function;
+  value: string  ;
+  onChange: (val:string)=>void;
   affix?: ReactNode;
   pleaceHolder?: string;
   subffix?: ReactNode;
   isPassword?: boolean; 
   styles ?: StyleProp<ViewStyle>,
-  type?: string
+  type?: string ,  key?:string, 
+  keyBoardType?: KeyboardType , 
+  maxlength?:number
 }
 const InputComponent = (props: Props) => {
-  const {value, onChange, affix, subffix, pleaceHolder, isPassword , styles} = props;
+  const {key ,value, onChange, affix, subffix, pleaceHolder, isPassword , styles  , keyBoardType , maxlength} = props;
 
 
   const [showPass , setShowpass] = useState(isPassword ?? false)
@@ -33,9 +37,9 @@ const InputComponent = (props: Props) => {
     <View style={[style.containerInput]}>
       {affix ?? affix}
         
-      <TextInput style = {[{flex:1 , paddingHorizontal:12} , styles] }
+      <TextInput maxLength={maxlength} keyboardType = {keyBoardType}style = {[{flex:1 , paddingHorizontal:12} , styles] }
         secureTextEntry={showPass}
-        value={value}
+        value={value+''}
         placeholder={pleaceHolder ?? ''}
         onChangeText={val => onChange(val)}
 
@@ -46,9 +50,9 @@ const InputComponent = (props: Props) => {
         {isPassword ? (
           <FontAwesome size={22} color={appColors.gray} name ={showPass?'eye' :'eye-slash'}/>
         ) : (
-          value.length > 0 && (
-            <AntDesign name="close" color={appColors.text} size={22} />
-          )
+          keyBoardType=='numeric' ? (
+           null 
+          ):value.length>0?<AntDesign name="close" color={appColors.text} size={22} />:null
         )}
       </TouchableOpacity>
     </View>

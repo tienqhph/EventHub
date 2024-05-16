@@ -6,13 +6,21 @@ import { RouteProp } from "@react-navigation/native";
 
 type RootStackParamList = {
     LoginScreen:undefined , 
-    HomeScreen :undefined
+    HomeScreen :undefined , 
+    SignupScreen:undefined  ,
+
+    VerificationScreen:undefined,
+    ResetPasswordScreen:undefined
+    
+
   };
 
 
 
 
   export type  RootStack = NativeStackNavigationProp<RootStackParamList , NAME_SCREENS.LOGIN_SCREEN>
+  
+  export type  RootStackSignup = NativeStackNavigationProp<RootStackParamList , NAME_SCREENS.SIGNUP_SCREEN>
 
 
 

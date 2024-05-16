@@ -1,11 +1,11 @@
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import React, { useState } from 'react';
-import {style} from '../../styles/globalStyle';
+import {style} from '../../../styles/globalStyle';
 import Swiper from 'react-native-swiper';
-import {appInfor, image} from '../../constants/const';
-import {appColors} from '../../constants/appColors';
+import {appInfor, image} from '../../../constants/const';
+import {appColors} from '../../../constants/appColors';
 import {useNavigation} from '@react-navigation/native';
-import {RootStack} from '../../navigators/typechecking/TypeChecking';
+import {RootStack} from '../../../navigators/typechecking/TypeChecking';
 
 const OnBoardingScreen = () => {
     const [indexSwiper , setIndexSwiper] = useState(0)

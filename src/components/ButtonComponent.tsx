@@ -20,7 +20,7 @@ interface Props {
   styles?: StyleProp<ViewStyle>;
   textColor?: string;
   textStyle?: StyleProp<TextStyle>;
-  onPress?: Function;
+  onPress?: ()=>void
   flexIcon?: 'reight' | 'left';
 }
 const ButtonComponent = (props: Props) => {
@@ -36,7 +36,7 @@ const ButtonComponent = (props: Props) => {
     flexIcon,
   } = props;
   return  type === 'primary' ?
-    <TouchableOpacity style = {[style.button , {backgroundColor:color??appColors.primary , } , styles]}>
+    <TouchableOpacity style = {[style.button , {backgroundColor:color??appColors.primary , } , styles]} onPress={onPress}>
 
         {icon && flexIcon ==='left' && icon}
       <TextComponent text={text} color={textColor} styles={textStyle} font={fonts.regular} />
@@ -44,7 +44,7 @@ const ButtonComponent = (props: Props) => {
       {icon && flexIcon ==='reight' && icon}
     </TouchableOpacity>
 
-    :<TouchableOpacity>
+    :<TouchableOpacity onPress={onPress}>
         <TextComponent text={text} color={type ==='link'? appColors.primary :appColors.text}/>
     </TouchableOpacity>
 
