@@ -6,9 +6,19 @@ import ButtonComponent from '../../../components/ButtonComponent';
 import { useNavigation } from '@react-navigation/native';
 import { RootStack } from '../../../navigators/typechecking/TypeChecking';
 
-const ForgotPassComponent = () => {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+interface Props{
+  isEnable:boolean , 
+  onpress :()=>void
+
+}
+
+
+
+const ForgotPassComponent = (props:Props) => {
+
+  const {isEnable , onpress} = props
+
 const navigation = useNavigation<RootStack>()
   return (
     <View style={[style.container]}>
@@ -17,8 +27,8 @@ const navigation = useNavigation<RootStack>()
           trackColor={{false: '#767577', true: appColors.primary}}
           thumbColor="#fff"
           ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={isEnabled}
+          onValueChange={onpress}
+          value={isEnable}
         />
         <TextComponent text='Remember Me'/>
       </View>

@@ -9,7 +9,12 @@ type RootStackParamList = {
     HomeScreen :undefined , 
     SignupScreen:undefined  ,
 
-    VerificationScreen:undefined,
+    VerificationScreen:undefined |{
+        code:number  ,
+        email:string ,  
+        passworrd:string , 
+        fullname:string
+    },
     ResetPasswordScreen:undefined
     
 
@@ -25,3 +30,4 @@ type RootStackParamList = {
 
 
   export  type PropsRoute = RouteProp< RootStackParamList , NAME_SCREENS.HOME_SCREEN>
+  export  type PropsRouteVerification = RouteProp< RootStackParamList , NAME_SCREENS.VERIFICATION>

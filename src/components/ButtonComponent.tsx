@@ -22,6 +22,7 @@ interface Props {
   textStyle?: StyleProp<TextStyle>;
   onPress?: ()=>void
   flexIcon?: 'reight' | 'left';
+  disable?:boolean
 }
 const ButtonComponent = (props: Props) => {
   const {
@@ -34,9 +35,10 @@ const ButtonComponent = (props: Props) => {
     styles,
     color,
     flexIcon,
+    disable
   } = props;
   return  type === 'primary' ?
-    <TouchableOpacity style = {[style.button , {backgroundColor:color??appColors.primary , } , styles]} onPress={onPress}>
+    <TouchableOpacity disabled={disable} style = {[style.button , {backgroundColor:disable?appColors.gray:color??appColors.primary , } , styles]} onPress={onPress}>
 
         {icon && flexIcon ==='left' && icon}
       <TextComponent text={text} color={textColor} styles={textStyle} font={fonts.regular} />

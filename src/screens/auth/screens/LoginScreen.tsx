@@ -6,7 +6,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import ButtonComponent from '../../../components/ButtonComponent';
 import InputComponent from '../../../components/InputComponent';
 import {ArrowRight, Lock, Sms} from 'iconsax-react-native';
@@ -19,33 +19,71 @@ import ForgotPassComponent from '../Components/ForgotPassComponent';
 import {fonts} from '../../../constants/fontFamily';
 import LoginWithOther from '../Components/LoginWithOther';
 import authenticationApi from '../../../apis/authApi';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux/store';
+import { addAuth } from '../../../redux/reducers/authReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const [dataEmail, setDataEmail] = useState('');
   const [dataPass, setDataPass] = useState('');
+  const dispatch = useDispatch<AppDispatch>()
+  const [textError, settextError] = useState('');
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const _onChangeEmail = (value: string) => {
-    setDataEmail(value);
+    if(value){
+      setDataEmail(value);
+    
+    }else{
+      setDataEmail('')
+    }
   };
   const _onChangePass = (value: string) => {
-    setDataPass(value);
+    if(value){
+      setDataPass(value);
+      settextError('')
+    }
+    else{
+      setDataPass('')
+    }
   };
 
-  const handleSignIn = async()=>{
+  const handleSignIn = async () => {
 
+ 
+    if (dataEmail == '' || dataPass == '') {
+      settextError('please enter your emal and password!!')
+    } else {
+      const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-    try {
-        const data = await authenticationApi.handleAuthentication('/hello')
-
-      console.log("data api" , data);
-      
-    
-          
-      
-    } catch (error) {
-      console.log("error" , error);
-      
+      if (reg.test(dataEmail) === true) {
+        try {
+          const dataLogin:any = await authenticationApi.handleAuthentication(
+            '/login',
+            {email: dataEmail, passworrd: dataPass},
+            'post',
+          )
+            if(dataLogin.data){
+              settextError('')
+              await AsyncStorage.setItem('auth',JSON.stringify(dataLogin) ).then(()=>console.log("lưu thành công"))
+               dispatch(addAuth({
+                email:dataLogin.data.email , 
+                id:dataLogin.data.id , 
+                token:dataLogin.data.token
+               }))
+            }else{
+              settextError('Email or pass is not correct!!!')
+            }
+       
+        } catch (error) {
+          console.log('error', error);
+        }
+      }else{
+        settextError('please enter correct format email')
+      }
     }
-  }
+  };
   return (
     <ImageBackground
       style={[styles.constainerLoginScreen]}
@@ -74,11 +112,15 @@ const LoginScreen = () => {
         pleaceHolder="Password"
       />
 
-      <ForgotPassComponent />
+       {
+        textError? <TextComponent text={textError} color='red'/>:<></>
+       }
+
+      <ForgotPassComponent  isEnable={isEnabled} onpress={()=>toggleSwitch()}/>
       <ButtonComponent
         styles={{marginHorizontal: 40}}
         flexIcon="reight"
-        text="SIGN IN" 
+        text="SIGN IN"
         onPress={handleSignIn}
         type="primary"
         textColor={appColors.white}
@@ -91,7 +133,7 @@ const LoginScreen = () => {
         icon={<ArrowRight size={22} color={appColors.white} />}
       />
 
-      <LoginWithOther text="Sign up"/>
+      <LoginWithOther text="Sign up" />
     </ImageBackground>
   );
 };

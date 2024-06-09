@@ -1,38 +1,34 @@
-import axios from "axios";
-import queryString from "query-string";
-
+import axios from 'axios';
+import queryString from 'query-string';
 
 const axiosClient = axios.create({
-    paramsSerializer:param => queryString.stringify(param)
-})
+  paramsSerializer: param => queryString.stringify(param),
+});
 
+axiosClient.interceptors.request.use(async (config: any) => {
+  config.headers = {
+    Authorization: '',
+    Accept: 'application/json',
 
-axiosClient.interceptors.request.use(async (config:any)=>{
-    config.headers = {
-        Authorization:'' , 
-        Accept:'application/json',
+    ...config.headers,
+  };
+  config.data;
 
-        ...config.headers
-    }
-        config.data
-
-    return config
-})
-
+  return config;
+});
 
 axiosClient.interceptors.response.use(
-    res =>{
+  res => {
+    if (res.status === 200) {
+     return res.data
+    } 
+   
+        throw new Error('Error');
+    
+  },
+  error => {
+    return error
+  },
+);
 
-        if(res.data &&res.status===200){
-            return res
-        }
-        throw new Error("Error");
-        
-  
-    } , error=>{
-        console.log("Error api" , JSON.stringify(error));
-        throw new Error(error.response);
-    }
-)
-
-export default axiosClient
+export default axiosClient;
