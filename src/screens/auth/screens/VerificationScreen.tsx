@@ -1,45 +1,143 @@
-import { ImageBackground, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import { RootStack } from '../../../navigators/typechecking/TypeChecking';
-import { useNavigation } from '@react-navigation/native';
-import { styles } from '../style';
-import { image } from '../../../constants/const';
-import { ArrowLeft, ArrowRight, Sms } from 'iconsax-react-native';
-import { appColors } from '../../../constants/appColors';
+import {
+  ImageBackground,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  PropsRouteVerification,
+  RootStack,
+} from '../../../navigators/typechecking/TypeChecking';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {styles} from '../style';
+import {image} from '../../../constants/const';
+import {ArrowLeft, ArrowRight, Sms} from 'iconsax-react-native';
+import {appColors} from '../../../constants/appColors';
 import TextComponent from '../../../components/TextComponent';
 import InputComponent from '../../../components/InputComponent';
 import ButtonComponent from '../../../components/ButtonComponent';
-import { fonts } from '../../../constants/fontFamily';
+import {fonts} from '../../../constants/fontFamily';
+import SpaceComponent from '../../../components/SpaceComponent';
+import authenticationApi from '../../../apis/authApi';
+import LoadingModal from '../../../modals/LoadingModal';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux/store';
+import { addAuth } from '../../../redux/reducers/authReducer';
 
 const VerificationScreen = () => {
-    const [number1, setdatanumber1] = useState("");
-    const [number2, setdatanumber2] = useState("");
-    const [number3, setdatanumber3] = useState("");
-    const [number4, setdatanumber4] = useState("");
+  const {params} = useRoute<PropsRouteVerification>();
+  const [countDown, setcountDown] = useState(60);
+  const [visiableModal, setvisiableModal] = useState(false);
+  const dispatch = useDispatch<AppDispatch>()
+  const [dataCode, setdataCode] = useState(params?.code);
 
-    const _onChangedata1 = (value: string) => {
-      setdatanumber1(value);
-    };
-    const _onChangedata2 = (value: string) => {
-        setdatanumber2(value);
-      };
-      const _onChangedata3 = (value: string) => {
-        setdatanumber3(value);
-      };
-      const _onChangedata4 = (value: string) => {
-        setdatanumber4(value);
-      };
+  const [dataCodeCompare, setdataCodeCompare] = useState("");
+  const [datacodeInput, setdatacodeInput] = useState<string []>([]);
+  const [disableButton, setdisableButton] = useState(false);
+  const [textError, settextError] = useState('');
+
+  const ref1 = useRef<any>()
+  const ref2 = useRef<any>()
+  const ref3 = useRef<any>()
+  const ref4 = useRef<any>()
+  const navigation = useNavigation<RootStack>();
 
 
-    const navigation = useNavigation<RootStack>()
+
+  useEffect(() => {
+    
+    if(countDown>0){
+
+      const interval = setInterval(()=>{
+      setcountDown(countDown => countDown-1)
+      } , 1000)
+      return  ()=>clearInterval(interval)
+    }
+   
+  }, [countDown]);
+
+  const handleChangeValueCode = ( val :string, index:number )=>{
+      const datacopy = [...datacodeInput]
+      datacopy [index] = val
+      setdatacodeInput(datacopy)
+
+  
+
+  }
+  useEffect(()=>{
+    ref1.current.focus()
+  } , [])
+useEffect(() => {
+    countDown>0?settextError(""):settextError("time out please Resend the code")
+    countDown==0&&setdataCode(0)
+}, [countDown]);
+useEffect(() => {
+    if(datacodeInput.length<4){
+        setdisableButton(true)
+    }else{
+      setdisableButton(false)
+    }
+
+}, [datacodeInput.length]);
+
+  const hanldReSendCode =async ()=>{
+
+    settextError("")
+    setvisiableModal(true)
+    try {
+      const res = await authenticationApi.handleAuthentication(
+        '/verification',
+        {email: params?.email},
+        'post',
+      );
+        setvisiableModal(false)
+
+        console.log(res)
+        setdataCode(res.data.code)
+        setcountDown(60)
+ 
+    } catch (error) {}
+
+    setvisiableModal(false);
+  }
+
+
+  useEffect(() => {
+    let res = ``
+      datacodeInput.forEach(data=>res+=data)
+      setdataCodeCompare(res)
+  }, [datacodeInput]);
+  const hanldContinue = async()=>{
+    setvisiableModal(true)
+    console.log(dataCodeCompare , dataCode)
+    
+    if(parseInt(dataCodeCompare)==dataCode){
+      console.log("vaof ddaay")
+        const res = await authenticationApi.handleAuthentication('/regiter' , {
+          email:params?.email, fullname:params?.fullname, passworrd:params?.passworrd 
+        } , 'post')
+          setvisiableModal(false)
+
+          dispatch(addAuth({email:res.data.email , id:res.data.id , token:res.data.token}))
+          
+    }else{
+      setvisiableModal(false)
+      settextError("code is not correct please try again!!!")
+    }
+
+  }
   return (
-<ImageBackground
+    <ImageBackground
       style={[styles.constainerLoginScreen]}
       source={image.image_background}>
       <StatusBar translucent backgroundColor="transparent" />
-   
-      <TouchableOpacity onPress={()=>navigation.pop()}>
-        <ArrowLeft size={22} color={appColors.back}/>
+
+      <TouchableOpacity onPress={() => navigation.pop()}>
+        <ArrowLeft size={22} color={appColors.back} />
       </TouchableOpacity>
 
       <TextComponent
@@ -47,54 +145,80 @@ const VerificationScreen = () => {
         text="Verification"
         styles={{color: '#120D26', paddingVertical: 24}}
       />
-       <TextComponent
-        text="We’ve send you the verification code on +1 2620 0323 7631"
+      <TextComponent
+        text={`We’ve send you the verification code on ${params?.email}`}
         styles={{color: '#120D26', paddingVertical: 24}}
       />
-    <View style = {{flexDirection:'row' , alignItems:'center' , justifyContent:'space-evenly'}}>
-    <InputComponent
-    styles ={{flex:0}}
-       keyBoardType='numeric'
-       maxlength={1}
-        value={number1}
-        onChange={_onChangedata1}
-        pleaceHolder="-"
-      />
-        <InputComponent
-         styles ={{flex:0}}
-         keyBoardType='numeric'
-         maxlength={1}
-        value={number2}
-        onChange={_onChangedata2}
-        pleaceHolder="-"
-      />
-        <InputComponent
-         styles ={{flex:0}}
-         keyBoardType='numeric'
-         maxlength={1}
-        value={number3}
-        onChange={_onChangedata3}
-        pleaceHolder="-"
-      />
-        <InputComponent
-         styles ={{flex:0}}
-         keyBoardType='numeric'
-         maxlength={1}
-        value={number4}
-        onChange={_onChangedata4}
-        pleaceHolder="-"
-      />
+      <View
+        style={{ width:'100%',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-evenly',
+        }}>
+        <TextInput
+          style={[
+            stylesVerification.textInput
+          ]}
+          keyboardType="numeric"
+          maxLength={1}
+          ref={ref1}
+          value={datacodeInput[0]}
 
-    </View>
-   
-
-   
-      <ButtonComponent
-
-        styles={{marginHorizontal: 40}}
+          onChangeText={(val)=> 
+            { val.length>0&&ref2.current.focus()
+              handleChangeValueCode(val , 0)
+            }}
+          placeholder="-"
+        />
+        <TextInput
+        ref={ref2}      value={datacodeInput[1]}
+          onChangeText={(val )=> {
+            val.length>0&&ref3.current.focus()
+            handleChangeValueCode(val , 1)
+          }}
+        style={[
+         stylesVerification.textInput
+        ]}
+          keyboardType="numeric"
+          maxLength={1}
+          
+          placeholder="-"
+        />
+        <TextInput
+        ref={ref3}
+        value={datacodeInput[2]}
+          onChangeText={(val)=> { ref4.current.focus() 
+            handleChangeValueCode(val , 2)
+          }}
+        style={[
+         stylesVerification.textInput
+        ]}
+          keyboardType="numeric"
+          maxLength={1}
+          
+          placeholder="-"
+        />
+        <TextInput
+        ref={ref4}
+        value={datacodeInput[3]}
+        onChangeText={(val)=> handleChangeValueCode(val , 3)}
+        style={[
+         stylesVerification.textInput
+        ]}
+          keyboardType="numeric"
+          maxLength={1}
+          
+          placeholder="-"
+        />
+      </View>
+          <SpaceComponent height={20}/>
+          <ButtonComponent
+          disable = {disableButton}
+        styles={{marginHorizontal: 40, marginVertical: 24}}
         flexIcon="reight"
-        text="Continute"
+        text="Continue"
         type="primary"
+        onPress={hanldContinue}
         textColor={appColors.white}
         textStyle={{
           fontFamily: fonts.bold,
@@ -104,19 +228,44 @@ const VerificationScreen = () => {
         }}
         icon={<ArrowRight size={22} color={appColors.white} />}
       />
-    <View style = {{alignItems:'center' , flexDirection:'row' , justifyContent:'center'}}>
-    <TextComponent
-        text="Re-send code in"
-        styles={{color: '#120D26', paddingVertical: 24}}
-      />
+
+     
+      {
+        countDown>0?      <View
+        style={{
+          alignItems: 'center',
+          flexDirection: 'row',
+          justifyContent: 'center',
+        }}>
         <TextComponent
-        text="0:20"
-        styles={{color:appColors.primary, paddingHorizontal: 12}}
-      />
-    </View>
-  
+          text="Re-send code in"
+          styles={{color: '#120D26', paddingVertical: 24}}
+        />
+        <TextComponent
+          text={`00:${countDown}`}
+          styles={{color: appColors.primary, paddingHorizontal: 12}}
+        />
+      </View>:<View style = {{alignItems:'center'  ,justifyContent:'center'}}>
+      <TextComponent text={textError} color='red' styles = {{textAlign:'center'}}/>
+      <ButtonComponent type='link' text='Re_Send Code' onPress={hanldReSendCode}/>
+      </View>
+      }
+        <LoadingModal isvisiable={visiableModal} />
     </ImageBackground>
-)}
+  );
+};
 
-export default VerificationScreen
+export default VerificationScreen;
 
+
+
+const stylesVerification = StyleSheet.create({
+  textInput:{padding:10,
+              borderRadius: 10,
+              borderWidth: 2,
+              borderColor: appColors.back,
+             textAlign:'center',
+              alignItems: 'center',
+              justifyContent: 'center',
+            },
+})

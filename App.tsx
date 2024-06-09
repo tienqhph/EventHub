@@ -1,24 +1,20 @@
-import {View, Text} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import AuthNavigator from './src/navigators/AuthNavigator';
-import {SplashScreen} from './src/screens';
 import {NavigationContainer} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {Provider} from 'react-redux';
+import AuthNavigator from './src/navigators/AuthNavigator';
+
+import {SplashScreen} from './src/screens';
+import {store} from './src/redux/store';
+import CheckAuthNavigator from './src/navigators/CheckAuthNavigator';
+import MainNavigator from './src/navigators/MainNavigator';
 
 export default function App() {
-  const [isShowSplash, setIsShowSplash] = useState(true);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsShowSplash(!isShowSplash);
-    }, 1500);
-
-    return () => clearTimeout(timeout);
-  }, []);
-  return isShowSplash ? (
-    <SplashScreen />
-  ) : (
-    <NavigationContainer>
-      <AuthNavigator />
-    </NavigationContainer>
+  
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <CheckAuthNavigator />
+      </NavigationContainer>
+    </Provider>
   );
 }
