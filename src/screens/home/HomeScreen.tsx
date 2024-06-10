@@ -7,7 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const dataAuthAffterLogOut:AuthState = {
   email: '',
   id: '',
-  token: ''
+  token: '',
+  isUpdated: false
 }
 const HomeScreen = () => {
   const dispach = useDispatch<AppDispatch>();
@@ -24,7 +25,7 @@ const getdataFromStorage =async ()=>{
   const datastorage: any = await AsyncStorage.getItem('auth');
 
   const dataparse = datastorage != null ? JSON.parse(datastorage) : null;
-  console.log("data storage ",dataparse.data)
+  console.log("data storage111 ",data)
 }
   return (
     <View>
@@ -38,7 +39,7 @@ const getdataFromStorage =async ()=>{
    
 
     </View>
-  );
+  )
 };
 
 export default HomeScreen;

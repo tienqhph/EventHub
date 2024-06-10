@@ -7,6 +7,7 @@ import OnBoardingScreen from '../screens/auth/screens/OnBoardingScreen'
 import SignUpScreen from '../screens/auth/screens/SignUpScreen'
 import VerificationScreen from '../screens/auth/screens/VerificationScreen'
 import ResetPasswordScreen from '../screens/auth/screens/ResetPasswordScreen'
+import NewPassword from '../screens/auth/screens/NewPassword'
 
 const AuthNavigator = () => {
 
@@ -18,6 +19,7 @@ const AuthNavigator = () => {
             <Stack.Screen name={NAME_SCREENS.SIGNUP_SCREEN} component={SignUpScreen}/>
             <Stack.Screen name={NAME_SCREENS.VERIFICATION} component={VerificationScreen}/>
             <Stack.Screen name={NAME_SCREENS.RESETPASSWORD_SCREEN} component={ResetPasswordScreen}/>
+            <Stack.Screen name={NAME_SCREENS.NEWPASSWORD_SCREEN} component={NewPassword}/>
         </Stack.Navigator>
   )
 }

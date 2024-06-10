@@ -15,7 +15,12 @@ type RootStackParamList = {
         passworrd:string , 
         fullname:string
     },
-    ResetPasswordScreen:undefined
+    ResetPasswordScreen:undefined , 
+    NewPassWord_Screen:undefined |{
+        id:string ,
+        
+    },
+
     
 
   };
@@ -31,3 +36,4 @@ type RootStackParamList = {
 
   export  type PropsRoute = RouteProp< RootStackParamList , NAME_SCREENS.HOME_SCREEN>
   export  type PropsRouteVerification = RouteProp< RootStackParamList , NAME_SCREENS.VERIFICATION>
+  export  type PropsRouteNewPass = RouteProp< RootStackParamList , NAME_SCREENS.NEWPASSWORD_SCREEN>
