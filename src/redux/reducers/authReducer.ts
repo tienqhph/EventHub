@@ -4,13 +4,15 @@ import {RootState} from '../store';
 export interface AuthState {
   email: string;
   id: string;
-  token: string;
+  token: string; 
+  isUpdated:boolean
 }
 
 const initialState: AuthState = {
   email: '',
   id: '',
   token: '',
+  isUpdated: false
 };
 
 export const authSlide = createSlice({

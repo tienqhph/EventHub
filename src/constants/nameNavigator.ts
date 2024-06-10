@@ -7,5 +7,6 @@ export  const enum NAME_SCREENS {
     ONBOARDING_SCREEN = 'OnBoardingScreen' , 
     SIGNUP_SCREEN = 'SignupScreen' , 
     VERIFICATION = 'VerificationScreen' , 
-    RESETPASSWORD_SCREEN = 'ResetPasswordScreen'
+    RESETPASSWORD_SCREEN = 'ResetPasswordScreen' , 
+    NEWPASSWORD_SCREEN = 'NewPassWord_Screen'
 }

@@ -21,13 +21,10 @@ axiosClient.interceptors.response.use(
   res => {
     if (res.status === 200) {
      return res.data
-    } 
-   
-        throw new Error('Error');
-    
+    }  
   },
   error => {
-    return error
+      return error
   },
 );
 

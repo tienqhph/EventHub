@@ -20,9 +20,11 @@ import {fonts} from '../../../constants/fontFamily';
 import LoginWithOther from '../Components/LoginWithOther';
 import authenticationApi from '../../../apis/authApi';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../redux/store';
+import { AppDispatch, RootState } from '../../../redux/store';
 import { addAuth } from '../../../redux/reducers/authReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { RootStack } from '../../../navigators/typechecking/TypeChecking';
 
 const LoginScreen = () => {
   const [dataEmail, setDataEmail] = useState('');
@@ -30,6 +32,7 @@ const LoginScreen = () => {
   const dispatch = useDispatch<AppDispatch>()
   const [textError, settextError] = useState('');
   const [isEnabled, setIsEnabled] = useState(false);
+  const navigation = useNavigation<RootStack>()
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const _onChangeEmail = (value: string) => {
     if(value){
@@ -59,19 +62,27 @@ const LoginScreen = () => {
 
       if (reg.test(dataEmail) === true) {
         try {
-          const dataLogin:any = await authenticationApi.handleAuthentication(
+          const dataLogin = await authenticationApi.handleAuthentication(
             '/login',
             {email: dataEmail, passworrd: dataPass},
             'post',
           )
+          console.log(dataLogin)
             if(dataLogin.data){
               settextError('')
+    
+
+              if(dataLogin.data.isUpdated===false){
               await AsyncStorage.setItem('auth',JSON.stringify(dataLogin) ).then(()=>console.log("lưu thành công"))
                dispatch(addAuth({
                 email:dataLogin.data.email , 
                 id:dataLogin.data.id , 
-                token:dataLogin.data.token
+                token:dataLogin.data.token , 
+                isUpdated:dataLogin.data.isUpdated??false
                }))
+              }else{
+                    navigation.navigate('NewPassWord_Screen' ,{  id:dataLogin.data.id })
+              }
             }else{
               settextError('Email or pass is not correct!!!')
             }

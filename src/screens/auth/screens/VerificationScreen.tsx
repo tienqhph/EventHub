@@ -27,6 +27,7 @@ import LoadingModal from '../../../modals/LoadingModal';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
 import { addAuth } from '../../../redux/reducers/authReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const VerificationScreen = () => {
   const {params} = useRoute<PropsRouteVerification>();
@@ -121,8 +122,8 @@ useEffect(() => {
           email:params?.email, fullname:params?.fullname, passworrd:params?.passworrd 
         } , 'post')
           setvisiableModal(false)
-
-          dispatch(addAuth({email:res.data.email , id:res.data.id , token:res.data.token}))
+          await AsyncStorage.setItem('auth',JSON.stringify(res) ).then(()=>console.log("lưu thành công"))
+          dispatch(addAuth({email:res.data.email , id:res.data.id , token:res.data.token , isUpdated:res.data.isUpdated??false}))
           
     }else{
       setvisiableModal(false)
