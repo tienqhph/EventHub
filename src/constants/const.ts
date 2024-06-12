@@ -11,7 +11,12 @@ export  const image  = {
 }
 
 
+export  const icon = {
+    iconhome:require('./../assets/images/icon-facebook.png'),
+    add_box:require('./../assets/images/add_box.png'),
 
+  
+}
 export  const iconApp = {
     icon_facebook :require('./../assets/images/icon-facebook.png'),
     icon_google :require('./../assets/images/icon-google.png')

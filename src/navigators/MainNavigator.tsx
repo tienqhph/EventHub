@@ -2,7 +2,9 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NAME_SCREENS } from '../constants/nameNavigator'
-import HomeNavigator from './HomeNavigator'
+import TabNavigator from './TabNavigator'
+import HomeDrawer from './HomeDrawer'
+
 
 const MainNavigator = () => {
 
@@ -10,7 +12,7 @@ const MainNavigator = () => {
     const Stack = createNativeStackNavigator()
   return (
         <Stack.Navigator screenOptions={{headerShown:false}}>
-            <Stack.Screen name={NAME_SCREENS.BOTTOM_TAB} component={HomeNavigator}/>
+            <Stack.Screen name={NAME_SCREENS.HOMEDRAWER_SCREEN} component={HomeDrawer}/>
         </Stack.Navigator>
   )
 }
