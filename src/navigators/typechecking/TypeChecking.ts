@@ -6,9 +6,7 @@ import { RouteProp } from "@react-navigation/native";
 
 type RootStackParamList = {
     LoginScreen:undefined , 
-    HomeScreen :undefined , 
     SignupScreen:undefined  ,
-
     VerificationScreen:undefined |{
         code:number  ,
         email:string ,  
@@ -20,20 +18,13 @@ type RootStackParamList = {
         id:string ,
         
     },
-
-    
+    HomeDrawerScreen:undefined
 
   };
-
-
-
 
   export type  RootStack = NativeStackNavigationProp<RootStackParamList , NAME_SCREENS.LOGIN_SCREEN>
   
   export type  RootStackSignup = NativeStackNavigationProp<RootStackParamList , NAME_SCREENS.SIGNUP_SCREEN>
 
-
-
-  export  type PropsRoute = RouteProp< RootStackParamList , NAME_SCREENS.HOME_SCREEN>
   export  type PropsRouteVerification = RouteProp< RootStackParamList , NAME_SCREENS.VERIFICATION>
   export  type PropsRouteNewPass = RouteProp< RootStackParamList , NAME_SCREENS.NEWPASSWORD_SCREEN>

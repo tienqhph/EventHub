@@ -33,7 +33,7 @@ const CheckAuthNavigator = () => {
 
     try {
    if(dataparse!=null){
-    dispatch(addAuth({email:dataparse.data.email , id:dataparse.data.id , token:dataparse.data.token}))
+    dispatch(addAuth({email:dataparse.data.email , id:dataparse.data.id , token:dataparse.data.token ,isUpdated:dataparse.isUpdated??false}))
   
    
    }
