@@ -1,20 +1,24 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import TextComponent from '../../../components/TextComponent';
-import {appColors} from '../../../constants/appColors';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import ButtonComponent from '../../../components/ButtonComponent';
-import {fonts} from '../../../constants/fontFamily';
-import {Image} from 'react-native';
-import {iconApp} from '../../../constants/const';
-import {useNavigation} from '@react-navigation/native';
+import TextComponent from '../../../components/TextComponent';
+import { appColors } from '../../../constants/appColors';
+import { iconApp } from '../../../constants/const';
+import { fonts } from '../../../constants/fontFamily';
 import {
-  RootStack,
-  RootStackSignup,
+  RootStack
 } from '../../../navigators/typechecking/TypeChecking';
 
+GoogleSignin.configure({
+  webClientId:'177856044457-8jdnbticjo5h1il4i3ijol1i4m5ftssa.apps.googleusercontent.com'
+});
 interface Props {
   text: string;
 }
+
+
 const LoginWithOther = ({text}: Props) => {
   const navigation = useNavigation<RootStack>();
 
@@ -26,12 +30,26 @@ const LoginWithOther = ({text}: Props) => {
     navigation.navigate('LoginScreen');
   };
 
+  const handleLoginWithGoogle = async()=>{  
+ 
+      try {
+       
+        await GoogleSignin.hasPlayServices({
+          showPlayServicesUpdateDialog:true
+        });
+    const userInfo = await GoogleSignin.signIn();
+    console.log("vao day" , userInfo)
+      } catch (error) {
+          console.log(error)
+      }
+  }
   return (
     <View style={[styles.container]}>
       <TextComponent text="OR" color={appColors.gray2} />
 
       <View style={{flexDirection: 'row'}}>
         <ButtonComponent
+        onPress={handleLoginWithGoogle}
           styles={{
             marginHorizontal: 40,
             backgroundColor: '#FFFFFF',
