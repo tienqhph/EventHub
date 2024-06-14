@@ -5,14 +5,22 @@ export interface AuthState {
   email: string;
   id: string;
   token: string; 
-  isUpdated:boolean
+  isUpdated:boolean , 
+  name:string,
+  photo:string , 
+  familyName:string , 
+  givenName :string
 }
 
 const initialState: AuthState = {
   email: '',
   id: '',
   token: '',
-  isUpdated: false
+  isUpdated: false,
+  name: '',
+  photo: '',
+  familyName: '',
+  givenName: ''
 };
 
 export const authSlide = createSlice({

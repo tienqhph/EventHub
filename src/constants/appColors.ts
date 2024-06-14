@@ -5,5 +5,6 @@ export  const appColors = {
     gray :'#807a7a' , 
     gray2 :'#dadada' , 
     colorLink:'#5669FF' , 
-    back:'black'
+    back:'black' , 
+    colorcyan:"#00F8FF"
 }

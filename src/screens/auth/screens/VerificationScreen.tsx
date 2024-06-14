@@ -119,7 +119,7 @@ useEffect(() => {
     if(parseInt(dataCodeCompare)==dataCode){
       console.log("vaof ddaay")
         const res = await authenticationApi.handleAuthentication('/regiter' , {
-          email:params?.email, fullname:params?.fullname, passworrd:params?.passworrd 
+          email:params?.email, name:params?.fullname, passworrd:params?.passworrd 
         } , 'post')
           setvisiableModal(false)
           await AsyncStorage.setItem('auth',JSON.stringify(res) ).then(()=>console.log("lưu thành công"))

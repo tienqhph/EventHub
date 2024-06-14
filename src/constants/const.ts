@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { Dimensions } from "react-native"
 
 export  const image  = {
@@ -14,6 +15,7 @@ export  const image  = {
 export  const icon = {
     iconhome:require('./../assets/images/icon-facebook.png'),
     add_box:require('./../assets/images/add_box.png'),
+    icon_knife:require('./../assets/images/knife.png')
 
   
 }

@@ -17,5 +17,12 @@ export const style = StyleSheet.create({
         alignItems:'center' , 
         paddingHorizontal:16 , paddingVertical:16 , 
         minHeight:56
-    }
+    },
+
+    avt :{
+        width: 60,
+        height: 60, marginTop:20 ,
+        borderRadius: 30,
+        backgroundColor: 'red',
+      }
 })

@@ -23,7 +23,7 @@ const TextComponent = (props: Props) => {
         {
           color: color ?? appColors.text,
           fontFamily: font ?? fonts.medium,
-          fontSize: size ?? tilte? 24: 14,
+          fontSize: size ?size: tilte? 24: 14,
           flex: flex ?? 0,
         },
         styles,
