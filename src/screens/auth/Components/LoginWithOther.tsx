@@ -82,7 +82,7 @@ const LoginWithOther = ({text}: Props) => {
         }else{
           const data = await Profile.getCurrentProfile()
             const res = await authenticationApi.handleAuthentication('/signinwithfacebook' , {datauser:data} , 'post')
-
+              console.log( 'data res',res)
             await AsyncStorage.setItem('auth',JSON.stringify(res) ).then(()=>console.log("lưu thành công"))
 
             console.log("data ress" , res)

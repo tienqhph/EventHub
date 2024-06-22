@@ -1,18 +1,17 @@
+import React, {ReactNode} from 'react';
 import {
-  View,
-  Text,
-  StyleProp,
-  ViewStyle,
-  ScrollView,
   ImageBackground,
   SafeAreaView,
+  ScrollView,
   StatusBar,
+  StyleProp,
+  View,
+  ViewStyle,
 } from 'react-native';
-import React, {ReactNode} from 'react';
 import {image} from '../constants/const';
 
-
-import { style } from '../styles/globalStyle';
+import {style} from '../styles/globalStyle';
+import TextComponent from './TextComponent';
 
 interface Props {
   IsBackground?: boolean;
@@ -24,25 +23,23 @@ interface Props {
 const ContainerComponent = (props: Props) => {
   const {isScoll, IsBackground, title, styles, children} = props;
 
-  const renderConpainer = isScoll ? (
-    <ScrollView style = {{flex:1}}>{children}</ScrollView>
+  const renderConptainer = isScoll ? (
+    <ScrollView style={[{flex: 1}, styles]}>{children}</ScrollView>
   ) : (
-    <View style = {[{flex:1}]}>{children}</View>
+    <View style={[{flex: 1}, styles]}>{children}</View>
   );
   return IsBackground ? (
-    <ImageBackground source={image.image_background} style = {{flex:1 }} >
-        <StatusBar  translucent backgroundColor='transparent'/>
-          
-            <View style = {{marginTop:50}}>
-            {renderConpainer}
-            </View>
-         
-        
-           
+    <ImageBackground
+      source={image.image_background}
+      style={[{flex: 1}, styles]}>
+      <StatusBar translucent backgroundColor="transparent" />
+      {title ? <TextComponent text={title} styles={{paddingTop: 20}} /> : <></>}
+      <View style={{marginTop: 50}}>{renderConptainer}</View>
     </ImageBackground>
   ) : (
-    <SafeAreaView style = {[style.container]}>
-      <View  style = {[style.container]}>{renderConpainer}</View>
+    <SafeAreaView style={[style.container, styles]}>
+      {title ? <TextComponent text={title} styles={{paddingTop: 20}} /> : <></>}
+      <View style={[style.container]}>{renderConptainer}</View>
     </SafeAreaView>
   );
 };

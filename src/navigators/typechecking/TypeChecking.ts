@@ -18,7 +18,8 @@ type RootStackParamList = {
         id:string ,
         
     },
-    HomeDrawerScreen:undefined
+    HomeDrawerScreen:undefined , 
+    DetailScreen:undefined
 
   };
 

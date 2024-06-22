@@ -25,16 +25,17 @@ interface Props {
   styles ?: StyleProp<ViewStyle>,
   type?: string ,  key?:string, 
   keyBoardType?: KeyboardType , 
-  maxlength?:number
+  maxlength?:number ,
+  onendEditing?:()=>void
 }
 const InputComponent = (props: Props) => {
-  const {key ,value, onChange, affix, subffix, pleaceHolder, isPassword , styles  , keyBoardType , maxlength} = props;
+  const { onendEditing,key ,value, onChange, affix, subffix, pleaceHolder, isPassword , styles  , keyBoardType , maxlength} = props;
 
 
   const [showPass , setShowpass] = useState(isPassword ?? false)
 
   return (
-    <View style={[style.containerInput]}>
+    <View style={[style.containerInput , styles]}>
       {affix ?? affix}
         
       <TextInput maxLength={maxlength} keyboardType = {keyBoardType}style = {[{flex:1 , paddingHorizontal:12} , styles] }
@@ -42,7 +43,7 @@ const InputComponent = (props: Props) => {
         value={value+''}
         placeholder={pleaceHolder ?? ''}
         onChangeText={val => onChange(val)}
-
+        onEndEditing={onendEditing}
         
       />
       {subffix ?? subffix}

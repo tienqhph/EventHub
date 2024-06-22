@@ -1,61 +1,95 @@
-import {
-  View,
-  Text,
-  Button,
-  TouchableOpacity,
-  StatusBar,
-  ScrollView,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch, RootState} from '../../redux/store';
-import {AuthState, removeAuth} from '../../redux/reducers/authReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {HambergerMenu, Notification, SearchNormal1} from 'iconsax-react-native';
+import React, {useEffect, useState} from 'react';
 import {
-  ArrowDown,
-  ArrowDown2,
-  ArrowDown3,
-  HambergerMenu,
-  Menu,
-  Notification,
-  SearchNormal,
-  SearchNormal1,
-} from 'iconsax-react-native';
-import {useNavigation} from '@react-navigation/native';
-import {RootStack} from '../../navigators/typechecking/TypeChecking';
-import ContainerComponent from '../../components/ContainerComponent';
-import {appColors} from '../../constants/appColors';
+  Image,
+  ImageBackground,
+  ScrollView,
+  StatusBar,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import GetLocation from 'react-native-get-location';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Octicons from 'react-native-vector-icons/Octicons';
+import {useDispatch, useSelector} from 'react-redux';
+import ItemEventsComponent from '../../components/ItemEventsComponent';
+import NearYouItemComponent from '../../components/NearYouItemComponent';
 import RowComponent from '../../components/RowComponent';
 import TextComponent from '../../components/TextComponent';
+import {appColors} from '../../constants/appColors';
 import {fonts} from '../../constants/fontFamily';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import ButtonComponent from '../../components/ButtonComponent';
-import Octicons from 'react-native-vector-icons/Octicons';
-import {styleHome} from './stylehome';
+import {AppDispatch, RootState} from '../../redux/store';
 import FilterDataComponent from './components/FilterDataComponent';
 import UpcomingEventsComponent from './components/UpcomingEventsComponent';
-
+import {styleHome} from './stylehome';
+import ButtonComponent from '../../components/ButtonComponent';
+import axios from 'axios';
+import {AdressModel} from '../../models/AdressModel';
+import Geocoder from 'react-native-geocoding';
+Geocoder.init('AIzaSyBHcsobecROerAYEpmy0UnYgsyq4orC5dE');
 const HomeScreen = ({navigation}: any) => {
   const dispach = useDispatch<AppDispatch>();
   const data = useSelector((state: RootState) => state.authReducer.dataAuth);
   const [datastorage, setdataStorage] = useState<any>();
 
+  const [dataadress, setdataadress] = useState<AdressModel>();
+
   useEffect(() => {
     getdataFromStorage();
-    console.log('data store', data.email);
+    console.log('data adress', dataadress);
   }, []);
   const getdataFromStorage = async () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 60000,
+    })
+      .then(location => {
+        console.log('location', location);
+        hadleReverseGeolocation(location.latitude, location.longitude);
+      })
+      .catch(error => {
+        const {code, message} = error;
+        console.warn(code, message);
+      });
     const datastorage: any = await AsyncStorage.getItem('auth');
 
     const dataparse = datastorage != null ? JSON.parse(datastorage) : null;
-   
+  };
+  const hadleReverseGeolocation = async (lat: number, long: number) => {
+    try {
+      await axios(
+        `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${lat}%2C${long}&lang=vi-US&apiKey=2YCjv-SMnzb4qtnQht5NwFpqg_XO7mCMTZymdE2jfYY`,
+      )
+        .then((data: any) => {
+          if (data) {
+            setdataadress(data.data);
+          }
+        })
+        .catch(error => console.log(error));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleFilter = (data: any) => {
+    console.log(data);
   };
 
-  const handleFilter = (data :any)=>{
-      console.log(data)
-  }
+  const dataEvent = {
+    title: 'International Band Music Concert',
+    uids: ['dsfdsij', 'dsfjdisf'],
+    date: '14 December, 2021',
+    time: 'Tuesday, 4:00PM - 9:00PM',
+    location: {
+      title: 'Gala Convention Center',
+      adress: '36 Guild Street London, UK ',
+    },
+    description: 'mô tả ',
+    authorId: '',
+    imgUrl: '',
+  };
   return (
-    <View style={{flex: 1}} >
+    <View style={{flex: 1}}>
       <StatusBar
         translucent
         backgroundColor="transparent"
@@ -69,7 +103,9 @@ const HomeScreen = ({navigation}: any) => {
             <HambergerMenu size={25} color="white" />
           </TouchableOpacity>
           <View>
-            <RowComponent flexD="row" style={{alignItems: 'center'}}>
+            <RowComponent
+              flexD="row"
+              style={{alignItems: 'center', justifyContent: 'center'}}>
               <TextComponent
                 text="Current Location"
                 color="white"
@@ -79,7 +115,14 @@ const HomeScreen = ({navigation}: any) => {
                 <AntDesign name="caretdown" size={10} color="white" />
               </TouchableOpacity>
             </RowComponent>
-            <TextComponent text="New Yourk, USA" color="white" />
+            <TextComponent
+              text={
+                dataadress?.items[0].address.district +
+                  ',' +
+                  dataadress?.items[0].address.countryName ?? ''
+              }
+              color="white"
+            />
           </View>
           <View
             style={{
@@ -136,14 +179,51 @@ const HomeScreen = ({navigation}: any) => {
             </View>
           </RowComponent>
         </View>
-     
       </View>
-      <View style = {{marginTop:-20  , marginLeft:20}}>
-             <FilterDataComponent onpress={handleFilter}/>
+      <View style={{marginTop: -20, marginLeft: 20}}>
+        <FilterDataComponent onpress={handleFilter} />
       </View>
+      <ScrollView>
+        <UpcomingEventsComponent
+          title="Upcoming Events"
+          onpress={() => console.log('see all')}
+        />
 
-      <UpcomingEventsComponent/>
- 
+        <ItemEventsComponent dataEvent={dataEvent} />
+
+        <View style={{paddingTop: 20, paddingHorizontal: 20}}>
+          <ImageBackground
+            source={require('./../../assets/images/bg_invite.png')}
+            style={{
+              padding: 10,
+              width: '100%',
+              height: 127,
+              justifyContent: 'space-evenly',
+            }}
+            borderRadius={20}>
+            <TextComponent text="Invite your friends" />
+            <TextComponent text="Get $20 for ticket" font={fonts.regular} />
+            <TouchableOpacity
+              style={{
+                backgroundColor: '#00F8FF',
+                borderRadius: 12,
+                width: 72,
+                height: 32,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <TextComponent text="INVITE" color="white" />
+            </TouchableOpacity>
+          </ImageBackground>
+        </View>
+        <NearYouItemComponent
+          address="36 Guild Street London, UK "
+          time="1st  May- Sat -2:00 PM"
+          image=""
+          isBookmark
+          title="International Band Music Concert"
+        />
+      </ScrollView>
     </View>
   );
 };

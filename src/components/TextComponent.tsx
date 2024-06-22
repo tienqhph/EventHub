@@ -11,13 +11,15 @@ interface Props {
   font?: string;
   styles?: StyleProp<TextStyle>;
 
-  tilte?:boolean
+  tilte?:boolean , 
+  numberofline?:number
 
 }
 const TextComponent = (props: Props) => {
-  const {text, color, size, flex, font, styles  , tilte} = props;
+  const {text, color, size, flex, font, styles  , tilte , numberofline} = props;
   return (
     <Text
+    numberOfLines={numberofline&&numberofline}
       style={[
         {},
         {
@@ -29,6 +31,7 @@ const TextComponent = (props: Props) => {
         styles,
       ]}>
       {text}
+      
     </Text>
   );
 };
