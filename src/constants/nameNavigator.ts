@@ -22,7 +22,8 @@ export  const enum NAME_SCREENS {
     CONTACTUS_SCREEN = 'ContactUsSreen' ,
     SETTINGSCREEN = 'SettingsScreen' , 
     HELPSFAQS_SCREEN = 'HelpScreen' , 
-    HOMEDRAWER_SCREEN = 'HomeDrawerScreen'
+    HOMEDRAWER_SCREEN = 'HomeDrawerScreen' , 
+    DETAIL_SCREEN = 'DetailScreen'
 
     
 }

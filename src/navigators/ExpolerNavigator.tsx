@@ -3,6 +3,7 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { NAME_SCREENS } from '../constants/nameNavigator'
 import { HomeScreen } from '../screens'
+import DetailScreen from '../screens/auth/screens/DetailScreen'
 
 const ExpolerNavigator = () => {
 
@@ -12,6 +13,7 @@ const ExpolerNavigator = () => {
       headerShown:false
     }}>
      <Stack.Screen name={NAME_SCREENS.HOME_SCREEN} component={HomeScreen}/>
+  
     </Stack.Navigator>
   )
 }

@@ -1,5 +1,5 @@
 import {View, Text, Image, FlatList, StyleSheet} from 'react-native';
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import ContainerComponent from './ContainerComponent';
 import {image} from '../constants/const';
 import TextComponent from './TextComponent';
@@ -32,6 +32,7 @@ interface Props {
   title: string;
   icon: ReactNode;
 }
+
 const dataAuthAffterLogOut:AuthState = {
   email: '',
   id: '',
@@ -44,7 +45,28 @@ const dataAuthAffterLogOut:AuthState = {
 }
 const CustomDrawer = ({navigation}: any) => {
   const dataselect = useSelector((state: RootState) => state.authReducer.dataAuth);
+  
+    const [datauser, setdatauser] = useState();
+  
 
+
+  useEffect( () => {
+   
+
+    handleGetdataUser()
+  
+    
+  }, []);
+
+  const handleGetdataUser =  async ()=>{
+  try {
+   await AsyncStorage.getItem('auth').then((data:any)=>setdatauser(data))
+
+    console.log("data select" , dataselect)
+  } catch (error) {
+    
+  }
+  }
   console.log(dataselect)
   const dispatch = useDispatch<AppDispatch>()
   const dataDrawer: Props[] = [
@@ -136,13 +158,23 @@ const CustomDrawer = ({navigation}: any) => {
       </RowComponent>
     </TouchableOpacity>
   );
+
+  const  avtDefault = (name:string)=>{
+    const newname = name.charAt(0)
+      return newname
+  }
   return (
-    <ContainerComponent styles={{flex: 1, backgroundColor: 'red'}}>
+    <ContainerComponent styles={{flex: 1, }}>
       <View style={{padding: 20, justifyContent: 'flex-start', flex: 1}}>
-        <Image
-          source={image.image_onboarding_1}
-          style={style.avt}
-        />
+      {
+        dataselect.photo? <Image
+        source={{uri:dataselect.photo}}
+        style={style.avt}
+      />:
+      <View style = {[style.avt , {backgroundColor:appColors.primary , alignItems:'center' , justifyContent:'center'}]}>
+          <TextComponent text={avtDefault(dataselect.givenName)} color='white' font={fonts.bold}/>
+      </View>
+      }
 
         <TextComponent text={dataselect.name} font={fonts.bold}  styles = {{paddingTop:14}}/>
 

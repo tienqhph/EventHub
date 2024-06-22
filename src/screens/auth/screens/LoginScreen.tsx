@@ -78,7 +78,11 @@ const LoginScreen = () => {
                 email:dataLogin.data.email , 
                 id:dataLogin.data.id , 
                 token:dataLogin.data.token , 
-                isUpdated:dataLogin.data.isUpdated??false
+                isUpdated:dataLogin.data.isUpdated??false , 
+                familyName:dataLogin.data.familyName??''  , 
+                givenName:dataLogin.data.givenName??''  , 
+                name:dataLogin.data.name??''  , 
+                photo:dataLogin.data.photo??'' 
                }))
               }else{
                     navigation.navigate('NewPassWord_Screen' ,{  id:dataLogin.data.id })
