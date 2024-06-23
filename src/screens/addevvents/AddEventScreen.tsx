@@ -41,7 +41,7 @@ const AddEventScreen = () => {
         value={dataEvent.description}
         pleaceHolder="description"
       />
-      <ChoiseLocation />
+      <ChoiseLocation onchange={val =>hanleChangeValue('location' , val)} />
       <ButtonComponent
         text="Add new Event"
         type="primary"

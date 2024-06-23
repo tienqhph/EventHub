@@ -9,7 +9,6 @@
     "test": "jest"
   },
   "dependencies": {
-
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-google-signin/google-signin": "^12.2.1",
     "@react-navigation/bottom-tabs": "^6.5.20",
@@ -18,13 +17,13 @@
     "@react-navigation/native-stack": "^6.9.26",
     "@react-navigation/stack": "^6.3.29",
     "@reduxjs/toolkit": "^2.2.4",
-   
     "axios": "^1.6.8",
     "google-auth-library": "^9.11.0",
     "iconsax-react-native": "^0.0.8",
     "query-string": "^9.0.0",
     "react": "18.2.0",
     "react-native": "0.74.2",
+    "react-native-date-picker": "^5.0.4",
     "react-native-dotenv": "^3.4.11",
     "react-native-drawer-layout": "^3.3.0",
     "react-native-fbsdk-next": "^13.0.0",

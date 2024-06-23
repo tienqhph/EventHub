@@ -18,7 +18,7 @@ interface Props {
   styles?: StyleProp<ViewStyle>;
   textColor?: string;
   textStyle?: StyleProp<TextStyle>;
-  onPress?: ()=>void
+  onPress?: ()=>void ;
   flexIcon?: 'reight' | 'left';
   disable?:boolean , 
   afix ?:ReactNode , 
