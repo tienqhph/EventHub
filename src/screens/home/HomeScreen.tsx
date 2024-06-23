@@ -27,18 +27,32 @@ import ButtonComponent from '../../components/ButtonComponent';
 import axios from 'axios';
 import {AdressModel} from '../../models/AdressModel';
 import Geocoder from 'react-native-geocoding';
+
 Geocoder.init('AIzaSyBHcsobecROerAYEpmy0UnYgsyq4orC5dE');
 const HomeScreen = ({navigation}: any) => {
   const dispach = useDispatch<AppDispatch>();
   const data = useSelector((state: RootState) => state.authReducer.dataAuth);
   const [datastorage, setdataStorage] = useState<any>();
-
+  const [datalocation, setdatalocation] = useState<{latitude:number ,longitude:number }>();
   const [dataadress, setdataadress] = useState<AdressModel>();
 
   useEffect(() => {
     getdataFromStorage();
-    console.log('data adress', dataadress);
+ 
   }, []);
+
+  useEffect(() => {
+    
+    handleSaveLatAndLong()
+    
+  }, [datalocation]);
+
+
+  const handleSaveLatAndLong = async() =>{
+  if(datalocation){
+    await AsyncStorage.setItem('datalocation' ,JSON.stringify(datalocation))
+  }
+  }
   const getdataFromStorage = async () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -46,12 +60,16 @@ const HomeScreen = ({navigation}: any) => {
     })
       .then(location => {
         console.log('location', location);
+        location&&setdatalocation({latitude:location.latitude , longitude:location.longitude})
         hadleReverseGeolocation(location.latitude, location.longitude);
+        
       })
       .catch(error => {
         const {code, message} = error;
         console.warn(code, message);
       });
+     
+   
     const datastorage: any = await AsyncStorage.getItem('auth');
 
     const dataparse = datastorage != null ? JSON.parse(datastorage) : null;

@@ -2,4 +2,5 @@
     <string name="app_name">EventHub</string>
     <string name="facebook_app_id">986865533094298</string>
     <string name="facebook_client_token">c513f7a639608dcd0daa4c1c5119a411</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAbbrzX8PbvmYxa4QzKC03wAGKcXacqF1A</string>
 </resources>
