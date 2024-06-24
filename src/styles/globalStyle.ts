@@ -36,4 +36,6 @@ export const style = StyleSheet.create({
         borderRadius: 12,
         marginBottom: 19,
       }
+
+      
 })

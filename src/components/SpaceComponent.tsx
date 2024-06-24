@@ -10,6 +10,6 @@ export default function SpaceComponent(props:Props) {
 
     const {height , width} = props
   return (
-  <View  style = {{height:height}}/>
+  <View  style = {{height:height , width:width}}/>
   )
 }

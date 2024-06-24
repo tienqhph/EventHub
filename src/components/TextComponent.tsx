@@ -4,7 +4,7 @@ import {appColors} from '../constants/appColors';
 import {fonts} from '../constants/fontFamily';
 
 interface Props {
-  text: string;
+  text: string ;
   color?: string;
   size?: number;
   flex?: number;
