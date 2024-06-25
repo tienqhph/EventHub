@@ -16,33 +16,40 @@ import {
 } from 'iconsax-react-native';
 import RowComponent from '../components/RowComponent';
 import ButtonComponent from '../components/ButtonComponent';
-import axios, { Axios } from 'axios';
+import axios, {Axios} from 'axios';
 import {LocationModel} from '../models/LoactionModel';
 import TextComponent from '../components/TextComponent';
 import Mapview, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {appInfor} from '../constants/const';
 import GetLocation from 'react-native-get-location';
-import { fonts } from '../constants/fontFamily';
+import {fonts} from '../constants/fontFamily';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 interface Props {
   isvisibal: boolean;
   onclose?: () => void;
   onchange: (val: string) => void;
-  data?:string
+  onchangeLatandLong: (val: {latidue: number; longtidue: number}) => void;
+  data?: string;
 }
-const LocationModal = ({isvisibal, onchange, onclose , data}: Props) => {
+const LocationModal = ({
+  isvisibal,
+  onchange,
+  onclose,
+  data,
+  onchangeLatandLong,
+}: Props) => {
   const [dataSearchkey, setdataSearchkey] = useState('');
   const [locationMarker, setlocationMarker] = useState<{
     latitude: number;
     longitude: number;
   }>();
 
-  const [dataAdress, setdataAdress] = useState("");
+  const [dataAdress, setdataAdress] = useState('');
 
   const [currentLocation, setcurrentLocation] = useState<{
     latitude: number;
     longitude: number;
-  }>({latitude:0 , longitude:0});
+  }>({latitude: 0, longitude: 0});
   const [dataLocation, setdataLocation] = useState<LocationModel[]>([]);
   useEffect(() => {
     if (!dataSearchkey) {
@@ -61,51 +68,67 @@ const LocationModal = ({isvisibal, onchange, onclose , data}: Props) => {
     }
   };
   useEffect(() => {
- if(isvisibal){
-  handleGetdataLatAndLong()
- }
+    if (isvisibal) {
+      handleGetdataLatAndLong();
+    }
   }, [isvisibal]);
 
   // useEffect(() => {
-    
-  //   handleReverseAdressToLocation()
+  //   handleReverseAdressToLocation();
   // }, [dataAdress]);
-  // const handleReverseAdressToLocation = async ()=>{
-  //     const url =`https://rsapi.goong.io/geocode?address=${dataAdress}&api_key=FebmVoxfgAOnN5HzUwbFl2bYJgVt1zXBwTOPVYRA`
-  //     try {
-  //         const res:any =await axios.get(url)
+  // const handleReverseAdressToLocation = async () => {
+  //   const url = `https://rsapi.goong.io/geocode?address=${dataAdress}&api_key=FebmVoxfgAOnN5HzUwbFl2bYJgVt1zXBwTOPVYRA`;
+  //   try {
+  //     const res: any = await axios.get(url);
 
-
-  //         console.log(res.data.results[0].geometry.location)
-  //        if(res){
-  //         setlocationMarker({latitude:res.data.results[0].geometry.location.lat , longitude:res.data.results[0].geometry.location.lng})
-  //        }
-  //     } catch (error) {
-  //       console.log("error" , error)
+  //     console.log(res.data.results[0].geometry.location);
+  //     if (res) {
+  //       setlocationMarker({
+  //         latitude: res.data.results[0].geometry.location.lat,
+  //         longitude: res.data.results[0].geometry.location.lng,
+  //       });
   //     }
-  //   } 
-  const handleGetdataLatAndLong = async()=>{
-   const data =  await  AsyncStorage.getItem('datalocation')
-   const dataparse = data != null ? JSON.parse(data) : null;
-    if(dataparse){
-      setlocationMarker(dataparse)
+  //   } catch (error) {
+  //     console.log('error', error);
+  //   }
+  // };
+  const handleGetdataLatAndLong = async () => {
+    const data = await AsyncStorage.getItem('datalocation');
+    const dataparse = data != null ? JSON.parse(data) : null;
+    if (dataparse) {
+      setlocationMarker(dataparse);
     }
-  }
+  };
 
   const RenderDataLocation = (item: LocationModel) => {
     return (
-      <TouchableOpacity style={{padding: 10}} onPress={()=>{setdataAdress(item.title) 
-        setdataSearchkey('')
-      }}>
+      <TouchableOpacity
+        style={{padding: 10}}
+        onPress={() => {
+          setdataAdress(item.title);
+          setdataSearchkey('');
+        }}>
         <TextComponent text={item.title} color="gray" />
       </TouchableOpacity>
     );
   };
 
-  const handleConfirm = ()=>{
-    onclose
-    console.log('vao dday')
-  }
+  const handleConfirm = () => {
+    onclose;
+    console.log('vao dday');
+  };
+
+  const handleRevLatandLong = async (e: any) => {
+    setlocationMarker(e.nativeEvent.coordinate);
+    console.log(e.nativeEvent.coordinate);
+    const url = `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${e.nativeEvent.coordinate.latitude}%2C${e.nativeEvent.coordinate.longitude}&lang=vi-US&apiKey=${process.env.APIKEY_HERAAPI}`;
+    const res = await axios
+      .get(url)
+      .then(respon => {
+        setdataAdress(respon.data.items[0].title);
+      })
+      .catch(error => console.log(error));
+  };
   return (
     <Modal visible={isvisibal} animationType="slide" style={{}}>
       <Mapview
@@ -115,23 +138,25 @@ const LocationModal = ({isvisibal, onchange, onclose , data}: Props) => {
           height: appInfor.sizes.HEIGHT,
           position: 'absolute',
         }}
-    
+        region={{
+          latitude: locationMarker ? locationMarker.latitude : 21.0518641,
+          longitude: locationMarker ? locationMarker.longitude : 105.7425046,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
         showsPointsOfInterest
         initialRegion={{
-          latitude: 21.0518641,
-          longitude: 105.7425046,
+          latitude: locationMarker ? locationMarker.latitude : 21.0518641,
+          longitude: locationMarker ? locationMarker.longitude : 105.7425046,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
         showsScale>
-  
         <Marker
           draggable
-          onDragEnd={e => setlocationMarker(e.nativeEvent.coordinate)}
+          onDragEnd={e => handleRevLatandLong(e)}
           coordinate={
-            locationMarker
-              ? locationMarker
-              : currentLocation && currentLocation
+            locationMarker ? locationMarker : currentLocation && currentLocation
           }
           description="đâsd"
           image={{uri: 'https://cdn-icons-png.flaticon.com/128/684/684908.png'}}
@@ -180,9 +205,31 @@ const LocationModal = ({isvisibal, onchange, onclose , data}: Props) => {
       ) : (
         <TextComponent text="" color="gray" styles={{padding: 10}} />
       )}
-     <View style = {{bottom:10 , position:'absolute' ,left:0 , right:0  , padding:20 }}>
-     <ButtonComponent  onPress={()=> onchange(dataAdress)} text='Confirm' textColor='white' textStyle = {{fontFamily:fonts.bold}} styles = {{  }} type='primary'/>
-     </View>
+      <View
+        style={{
+          bottom: 10,
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          padding: 20,
+        }}>
+        <ButtonComponent
+          onPress={() => {
+            onchange(dataAdress);
+            if (locationMarker) {
+              onchangeLatandLong({
+                latidue: locationMarker.latitude,
+                longtidue: locationMarker.longitude,
+              });
+            }
+          }}
+          text="Confirm"
+          textColor="white"
+          textStyle={{fontFamily: fonts.bold}}
+          styles={{}}
+          type="primary"
+        />
+      </View>
     </Modal>
   );
 };

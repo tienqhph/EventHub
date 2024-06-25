@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "43016781322",
+    "project_id": "eventhub-9dc13",
+    "storage_bucket": "eventhub-9dc13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43016781322:android:21a12acc4f2a6de873a9f3",
+        "android_client_info": {
+          "package_name": "com.hoangtien.eventhub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRWFZ3nLkDK5XHtaLgU9WQ8d01w8pw9_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

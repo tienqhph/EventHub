@@ -5,7 +5,6 @@ class AuthApi {
   handleAuthentication = async (
     url: string,
     data?: any,
-    config?:any,
     method?: 'get' | 'post' | 'put' | 'delete',
   ) => {
     return await axiosClient(`${appInfor.URL}/auth${url}`,{

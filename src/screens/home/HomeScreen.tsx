@@ -42,6 +42,9 @@ const HomeScreen = ({navigation}: any) => {
   }, []);
 
   useEffect(() => {
+    console.log('data res Login with google', data);
+  }, [data]);
+  useEffect(() => {
     
     handleSaveLatAndLong()
     

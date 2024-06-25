@@ -19,7 +19,9 @@ type RootStackParamList = {
         
     },
     HomeDrawerScreen:undefined , 
-    DetailScreen:undefined
+    DetailScreen:undefined 
+    HomeScreen:undefined ,
+    ExploreScreen:undefined
 
   };
 

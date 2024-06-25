@@ -24,7 +24,7 @@ const ContainerComponent = (props: Props) => {
   const {isScoll, IsBackground, title, styles, children} = props;
 
   const renderConptainer = isScoll ? (
-    <ScrollView style={[{flex: 1}, styles]}>{children}</ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false} style={[{flex: 1}, styles]}>{children}</ScrollView>
   ) : (
     <View style={[{flex: 1}, styles]}>{children}</View>
   );

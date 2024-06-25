@@ -29,6 +29,7 @@ const TabNavigator = ({navigation}: any) => {
   const BottomTab = createBottomTabNavigator();
   return (
     <BottomTab.Navigator
+    
       screenOptions={({ route, navigation }) => ({
         headerShown: false,
         tabBarShowLabel: false,
@@ -47,6 +48,7 @@ const TabNavigator = ({navigation}: any) => {
           alignItems: 'center',
           justifyContent: 'center',
         } , 
+        tabBarHideOnKeyboard:true
   
       })}>
       <BottomTab.Screen

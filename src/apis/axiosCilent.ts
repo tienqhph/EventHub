@@ -5,7 +5,6 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async (config: any) => {
-  console.log('data config', config.data);
   config.headers = {
     Authorization: config.data.token? `Bearer ${config.data.token}`:'',
     Accept: 'application/json',
