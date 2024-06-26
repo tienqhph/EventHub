@@ -3,7 +3,7 @@ import {RootState} from '../store';
 
 export interface AuthState {
   email: string;
-  id: string;
+  iduser: string;
   token: string; 
   isUpdated:boolean , 
   name:string,
@@ -14,7 +14,7 @@ export interface AuthState {
 
 const initialState: AuthState = {
   email: '',
-  id: '',
+  iduser: '',
   token: '',
   isUpdated: false,
   name: '',
@@ -30,8 +30,6 @@ export const authSlide = createSlice({
   },
   reducers: {
     addAuth: (state, action: PayloadAction<AuthState>) => {
-
-      console.log("vào đây sdahsdsahdsahdsahdu")
       state.dataAuth = action.payload;
     },
     removeAuth:(state)=>{

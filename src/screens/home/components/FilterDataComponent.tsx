@@ -22,8 +22,9 @@ interface Props {
     onpress ?:(data:any)=>void , 
     bgcolorcolor?:string , 
     textcolor?:string , 
-    coloricon?:string , 
+    coloricon?:boolean , 
     styles?:StyleProp<ViewStyle>
+
 }
 
 const FilterDataComponent = ({onpress , bgcolorcolor , coloricon , styles , textcolor}:Props) => {
@@ -34,7 +35,7 @@ const FilterDataComponent = ({onpress , bgcolorcolor , coloricon , styles , text
         <MaterialIcons
           name="sports-basketball"
           size={20}
-          color={appColors.white}
+          color={coloricon?'#F0635A':appColors.white}
         />
       ),key:'sports' , 
 
@@ -43,7 +44,7 @@ const FilterDataComponent = ({onpress , bgcolorcolor , coloricon , styles , text
     },
     {
       id: '1', key:'music' , 
-      icon: <FontAwesome name="music" size={20} color={appColors.white} />,
+      icon: <FontAwesome name="music" size={20}   color={coloricon?'#F59762':appColors.white} />,
       title: 'Music ',
       color: '#F59762',
     },
@@ -52,7 +53,7 @@ const FilterDataComponent = ({onpress , bgcolorcolor , coloricon , styles , text
       key :'food',
       icon: (
         <View>
-          <Image source={icon.icon_knife} style={{width: 20, height: 20}} />
+          <Image source={icon.icon_knife} style={{width: 20, height: 20 }} tintColor={coloricon?'#29D697':appColors.white}  />
         </View>
       ),
       title: 'Food',
@@ -62,7 +63,7 @@ const FilterDataComponent = ({onpress , bgcolorcolor , coloricon , styles , text
       id: '3',
        key:'art',
       icon: (
-        <MaterialCommunityIcons name="draw" size={20} color={appColors.white} />
+        <MaterialCommunityIcons name="draw" size={20} color={coloricon? '#46CDFB':appColors.white} />
       ),
       title: 'Art',
       color: '#46CDFB',
@@ -71,7 +72,7 @@ const FilterDataComponent = ({onpress , bgcolorcolor , coloricon , styles , text
 
   const Item = ({color , icon , title}: dataFilterInterface) => {
     return(
-        <View  style = {{marginRight:10 , minWidth:82}}>
+        <View  style = {[{marginRight:10 , minWidth:82} , styles]}>
             <TouchableOpacity onPress={()=>onpress&&onpress(title)} style = {{backgroundColor:bgcolorcolor?bgcolorcolor:color , padding:10 , borderRadius:20}}>
                 <RowComponent flexD='row'>
                     {icon}

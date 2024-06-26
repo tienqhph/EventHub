@@ -15,14 +15,24 @@ interface Props {
           adress: string;
         },
   ) => void;
+
+  onchaneLatandLong: (val: {latidue?: number; longtidue?: number}) => void;
 }
-const ChoiseLocation = ({onchange}: Props) => {
+const ChoiseLocation = ({onchange, onchaneLatandLong}: Props) => {
   const [isvisiblemodal, setisvisiblemodal] = useState(false);
   const [dataAdress, setdataAdress] = useState('');
+  const [dataLatandLong, setdataLatandLong] = useState<{
+    latidue: number;
+    longtidue: number;
+  }>();
   useEffect(() => {
     onchange({
       title: '',
       adress: dataAdress,
+    });
+    onchaneLatandLong({
+      latidue: dataLatandLong?.latidue,
+      longtidue: dataLatandLong?.longtidue,
     });
   }, [dataAdress]);
 
@@ -43,6 +53,7 @@ const ChoiseLocation = ({onchange}: Props) => {
         <ArrowRight2 size={20} color="gray" />
       </RowComponent>
       <LocationModal
+        onchangeLatandLong={val => setdataLatandLong(val)}
         data={dataAdress.length > 0 ? dataAdress : ''}
         isvisibal={isvisiblemodal}
         onclose={() => setisvisiblemodal(false)}

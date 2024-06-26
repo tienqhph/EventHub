@@ -5,7 +5,7 @@ import React, { ReactNode } from 'react'
 interface Props {
     flex?:number , 
     style?:StyleProp<ViewStyle>
-    children?:ReactNode , 
+    children:ReactNode , 
     flexD:"row" | "column" | "row-reverse" | "column-reverse" | undefined
     onpress?:()=>void
 

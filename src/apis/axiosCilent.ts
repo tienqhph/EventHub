@@ -3,9 +3,7 @@ import queryString from 'query-string';
 const axiosClient = axios.create({
   paramsSerializer: param => queryString.stringify(param),
 });
-
 axiosClient.interceptors.request.use(async (config: any) => {
-  console.log('data config', config.data);
   config.headers = {
     Authorization: config.data.token? `Bearer ${config.data.token}`:'',
     Accept: 'application/json',

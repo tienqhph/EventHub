@@ -14,47 +14,66 @@ import {EyeSlash} from 'iconsax-react-native';
 import {appColors} from '../constants/appColors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 interface Props {
-  value: string  ;
-  onChange: (val:string)=>void;
+  value: string;
+  onChange: (val: any) => void;
   affix?: ReactNode;
   pleaceHolder?: string;
   subffix?: ReactNode;
-  isPassword?: boolean; 
-  styles ?: StyleProp<ViewStyle>,
-  type?: string ,  key?:string, 
-  keyBoardType?: KeyboardType , 
-  maxlength?:number ,
-  onendEditing?:()=>void
+  isPassword?: boolean;
+  styles?: StyleProp<ViewStyle>;
+  type?: string;
+  key?: string;
+  keyBoardType?: KeyboardType;
+  maxlength?: number;
+  onendEditing?: () => void;
 }
 const InputComponent = (props: Props) => {
-  const { onendEditing,key ,value, onChange, affix, subffix, pleaceHolder, isPassword , styles  , keyBoardType , maxlength} = props;
+  const {
+    onendEditing,
+    key,
+    value,
+    onChange,
+    affix,
+    subffix,
+    pleaceHolder,
+    isPassword,
+    styles,
+    keyBoardType,
+    maxlength,
+  } = props;
 
-
-  const [showPass , setShowpass] = useState(isPassword ?? false)
+  const [showPass, setShowpass] = useState(isPassword ?? false);
 
   return (
-    <View style={[style.containerInput , styles]}>
+    <View style={[style.containerInput, styles]}>
       {affix ?? affix}
-        
-      <TextInput maxLength={maxlength} keyboardType = {keyBoardType}style = {[{flex:1 , paddingHorizontal:12} , styles] }
+
+      <TextInput
+        maxLength={maxlength}
+        keyboardType={keyBoardType}
+        style={[{flex: 1, paddingHorizontal: 12}, styles]}
         secureTextEntry={showPass}
-        value={value+''}
+        value={value + ''}
         placeholder={pleaceHolder ?? ''}
         onChangeText={val => onChange(val)}
         onEndEditing={onendEditing}
-        
       />
       {subffix ?? subffix}
-      <TouchableOpacity onPress={isPassword?()=> setShowpass(!showPass) :()=> onChange('')}>
+      <TouchableOpacity
+        onPress={
+          isPassword ? () => setShowpass(!showPass) : () => onChange('')
+        }>
         {isPassword ? (
-          <FontAwesome size={22} color={appColors.gray} name ={showPass?'eye' :'eye-slash'}/>
-        ) : (
-          keyBoardType=='numeric' ? (
-           null 
-          ):value.length>0?<AntDesign name="close" color={appColors.text} size={22} />:null
-        )}
+          <FontAwesome
+            size={22}
+            color={appColors.gray}
+            name={showPass ? 'eye' : 'eye-slash'}
+          />
+        ) : keyBoardType == 'numeric' ? null : value.length > 0 ? (
+          <AntDesign name="close" color={appColors.text} size={22} />
+        ) : null}
       </TouchableOpacity>
     </View>
   );
@@ -71,6 +90,7 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     borderColor: appColors.gray2,
     minHeight: 56,
-    borderRadius: 12,  marginBottom:19
-  },  
+    borderRadius: 12,
+    marginBottom: 19,
+  },
 });

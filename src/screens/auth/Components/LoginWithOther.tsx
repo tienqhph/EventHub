@@ -1,6 +1,9 @@
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from '@react-native-google-signin/google-signin';
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import ButtonComponent from '../../../components/ButtonComponent';
 import TextComponent from '../../../components/TextComponent';
@@ -10,8 +13,8 @@ import {fonts} from '../../../constants/fontFamily';
 import {RootStack} from '../../../navigators/typechecking/TypeChecking';
 import authenticationApi from '../../../apis/authApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch} from 'react-redux';
-import {AppDispatch} from '../../../redux/store';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../../redux/store';
 import {addAuth} from '../../../redux/reducers/authReducer';
 import {
   Settings,
@@ -20,6 +23,7 @@ import {
   LoginManager,
   Profile,
 } from 'react-native-fbsdk-next';
+import axios from 'axios';
 
 GoogleSignin.configure({
   webClientId:
@@ -32,10 +36,12 @@ interface Props {
 
 const LoginWithOther = ({text}: Props) => {
   const navigation = useNavigation<RootStack>();
+ 
   const dispatch = useDispatch<AppDispatch>();
   const _gotoSignup = () => {
     navigation.navigate('SignupScreen');
   };
+
 
   const _gotoSignIn = () => {
     navigation.navigate('LoginScreen');
@@ -47,6 +53,8 @@ const LoginWithOther = ({text}: Props) => {
         showPlayServicesUpdateDialog: true,
       });
       const userInfo = await GoogleSignin.signIn();
+      console.log('data user infor', userInfo);
+
       const res = await authenticationApi.handleAuthentication(
         '/signinwithgoogle',
         {userInfor: userInfo},
@@ -56,11 +64,10 @@ const LoginWithOther = ({text}: Props) => {
         console.log('lưu thành công'),
       );
 
-      console.log('data ress', res.data.iduser);
       dispatch(
         addAuth({
           email: res.data.email,
-          id: res.data.iduser,
+          iduser: res.data.iduser,
           token: res.data.token,
           isUpdated: res.data.isUpdated ?? false,
           familyName: res.data.familyName,
@@ -70,7 +77,7 @@ const LoginWithOther = ({text}: Props) => {
         }),
       );
     } catch (error) {
-      console.log(error);
+      console.log('message', error);
     }
   };
   const signOut = async () => {
@@ -102,14 +109,14 @@ const LoginWithOther = ({text}: Props) => {
         console.log('data ress', res);
         dispatch(
           addAuth({
-            email: res.data.email,
-            id: res.data.iduser,
-            token: res.data.token,
-            isUpdated: res.data.isUpdated ?? false,
-            familyName: res.data.familyName,
-            photo: res.data.photo,
-            givenName: res.data.givenName,
-            name: res.data.name,
+            email: res.data.data.email,
+            iduser: res.data.data.iduser,
+            token: res.data.data.token,
+            isUpdated: res.data.data.isUpdated ?? false,
+            familyName: res.data.data.familyName,
+            photo: res.data.data.photo,
+            givenName: res.data.data.givenName,
+            name: res.data.data.name,
           }),
         );
       }
