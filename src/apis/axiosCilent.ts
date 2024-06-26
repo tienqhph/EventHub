@@ -3,7 +3,6 @@ import queryString from 'query-string';
 const axiosClient = axios.create({
   paramsSerializer: param => queryString.stringify(param),
 });
-
 axiosClient.interceptors.request.use(async (config: any) => {
   config.headers = {
     Authorization: config.data.token? `Bearer ${config.data.token}`:'',
