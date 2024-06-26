@@ -1,12 +1,12 @@
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import { Location } from 'iconsax-react-native';
 import React from 'react';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { appColors } from '../constants/appColors';
+import { fonts } from '../constants/fontFamily';
 import UpcomingEventsComponent from '../screens/home/components/UpcomingEventsComponent';
 import RowComponent from './RowComponent';
 import TextComponent from './TextComponent';
-import {appColors} from '../constants/appColors';
-import {fonts} from '../constants/fontFamily';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {Location} from 'iconsax-react-native';
 interface Props {
   image?: string;
   time?: string;
@@ -39,7 +39,12 @@ const NearYouItemComponent = (props: Props) => {
           source={require('./../assets/images/imageevnts.png')}
           style={{width: 80, height: 90, borderRadius: 10}}
         />
-        <View style={{justifyContent: 'center', flexShrink: 1 , paddingHorizontal:10}}>
+        <View
+          style={{
+            justifyContent: 'center',
+            flexShrink: 1,
+            paddingHorizontal: 10,
+          }}>
           <TextComponent
             text={time ? time : ''}
             color={appColors.primary}

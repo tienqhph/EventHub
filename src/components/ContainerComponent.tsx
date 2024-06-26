@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, { ReactNode } from 'react';
 import {
   ImageBackground,
   SafeAreaView,
@@ -8,9 +8,9 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {image} from '../constants/const';
+import { image } from '../constants/const';
 
-import {style} from '../styles/globalStyle';
+import { style } from '../styles/globalStyle';
 import TextComponent from './TextComponent';
 
 interface Props {
@@ -24,7 +24,11 @@ const ContainerComponent = (props: Props) => {
   const {isScoll, IsBackground, title, styles, children} = props;
 
   const renderConptainer = isScoll ? (
-    <ScrollView showsVerticalScrollIndicator={false} style={[{flex: 1}, styles]}>{children}</ScrollView>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={[{flex: 1}, styles]}>
+      {children}
+    </ScrollView>
   ) : (
     <View style={[{flex: 1}, styles]}>{children}</View>
   );

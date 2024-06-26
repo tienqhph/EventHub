@@ -1,17 +1,16 @@
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {ArrowCircleDown, SearchNormal1} from 'iconsax-react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Modalize} from 'react-native-modalize';
-import {Portal} from 'react-native-portalize';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { ArrowCircleDown, SearchNormal1 } from 'iconsax-react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Modalize } from 'react-native-modalize';
+import { Portal } from 'react-native-portalize';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useSelector} from 'react-redux';
-import authenticationApi from '../apis/authApi';
-import {appColors} from '../constants/appColors';
-import {fonts} from '../constants/fontFamily';
-import {RootState} from '../redux/store';
-import {style} from '../styles/globalStyle';
+import { useSelector } from 'react-redux';
+import { appColors } from '../constants/appColors';
+import { fonts } from '../constants/fontFamily';
+import { RootState } from '../redux/store';
+import { style } from '../styles/globalStyle';
 import ButtonComponent from './ButtonComponent';
 import InputComponent from './InputComponent';
 import RowComponent from './RowComponent';
@@ -25,17 +24,21 @@ export interface Userselect {
   name: string;
   iduser: string;
 }
-export  interface Category{
-
-}
+export interface Category {}
 interface Props {
-  select:  string[];
-  onselected: (val:  Userselect[]) => void;
-  values: Userselect[] ;
-  multible?:boolean , 
-  dataconfirm:Userselect[]
+  select: string[];
+  onselected: (val: Userselect[]) => void;
+  values: Userselect[];
+  multible?: boolean;
+  dataconfirm: Userselect[];
 }
-const DropDownComponent = ({onselected, select, values , multible ,dataconfirm}: Props) => {
+const DropDownComponent = ({
+  onselected,
+  select,
+  values,
+  multible,
+  dataconfirm,
+}: Props) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [dataSearchkey, setdataSearchkey] = useState('');
   const [isvisiableModalize, setisvisiableModalize] = useState(false);
@@ -46,10 +49,6 @@ const DropDownComponent = ({onselected, select, values , multible ,dataconfirm}:
 
   const [dataUserSelect, setdataUserSelect] = useState<Userselect[]>([]);
 
-
-
-
-  
   useEffect(() => {
     if (isvisiableModalize) {
       modalize.current?.open();
@@ -57,8 +56,6 @@ const DropDownComponent = ({onselected, select, values , multible ,dataconfirm}:
       modalize.current?.close();
     }
   }, [isvisiableModalize]);
-
-  
 
   const handleChangeUser = (user: Userselect, index: number) => {
     const exitstinguser = dataUserSelect.findIndex(
@@ -92,7 +89,7 @@ const DropDownComponent = ({onselected, select, values , multible ,dataconfirm}:
             <View style={{alignItems: 'flex-start', flex: 1, padding: 10}}>
               {dataconfirm.map((item, index) => (
                 <RowComponent
-                key={index}
+                  key={index}
                   flexD="row"
                   style={{
                     borderRadius: 10,
@@ -118,7 +115,6 @@ const DropDownComponent = ({onselected, select, values , multible ,dataconfirm}:
             <TextComponent
               text="Add user"
               flex={1}
-              
               styles={{textAlign: 'center'}}
             />
           )}
@@ -148,8 +144,8 @@ const DropDownComponent = ({onselected, select, values , multible ,dataconfirm}:
                 type="link"
                 styles={{}}
                 onPress={() => {
-                  setisvisiableModalize(!isvisiableModalize) }
-                }
+                  setisvisiableModalize(!isvisiableModalize);
+                }}
               />
             </RowComponent>
           }
@@ -187,19 +183,27 @@ const DropDownComponent = ({onselected, select, values , multible ,dataconfirm}:
               ? values.map((item, index) => (
                   <TouchableOpacity
                     key={item.iduser}
-                    onPress={() =>multible? handleChangeUser(item, index): setdataUserSelect([item])}
+                    onPress={() =>
+                      multible
+                        ? handleChangeUser(item, index)
+                        : setdataUserSelect([item])
+                    }
                     style={{paddingVertical: 10}}>
                     <RowComponent flexD="row">
                       <TextComponent
                         text={item.email}
                         styles={{
                           flex: 1,
-                          color: dataUserSelect.includes(item)||select.includes(item.iduser)
-                            ? appColors.primary
-                            : appColors.gray,
+                          color:
+                            dataUserSelect.includes(item) ||
+                            select.includes(item.iduser)
+                              ? appColors.primary
+                              : appColors.gray,
                         }}
                       />
-                      {dataUserSelect.includes(item)|| dataUserSelect.includes(item)||select.includes(item.iduser)? (
+                      {dataUserSelect.includes(item) ||
+                      dataUserSelect.includes(item) ||
+                      select.includes(item.iduser) ? (
                         <MaterialIcons
                           name="check-circle-outline"
                           size={20}

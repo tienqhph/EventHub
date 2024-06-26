@@ -1,5 +1,5 @@
-import {View, Text, ViewStyle, StyleProp, TouchableOpacity} from 'react-native';
-import React, {ReactNode} from 'react';
+import React, { ReactNode } from 'react';
+import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 interface Props {
   onpress?: () => void;
   icon: ReactNode;

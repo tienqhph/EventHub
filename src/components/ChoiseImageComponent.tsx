@@ -1,30 +1,35 @@
-import {View, Text, TouchableOpacity, Modal, StatusBar, StyleProp, ViewStyle} from 'react-native';
-import React, {ReactNode, useEffect, useRef, useState} from 'react';
-import TextComponent from './TextComponent';
-import SpaceComponent from './SpaceComponent';
-import {Portal} from 'react-native-portalize';
-import {Modalize} from 'react-native-modalize';
-import RowComponent from './RowComponent';
-import {Camera, Folder, Folder2, Link} from 'iconsax-react-native';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import {
+  Modal,
+  StatusBar,
+  StyleProp,
+  TouchableOpacity,
+  View,
+  ViewStyle
+} from 'react-native';
 import ImageCropPicker, { ImageOrVideo } from 'react-native-image-crop-picker';
+import { Modalize } from 'react-native-modalize';
+import { Portal } from 'react-native-portalize';
 import ButtonComponent from './ButtonComponent';
 import InputComponent from './InputComponent';
+import RowComponent from './RowComponent';
+import SpaceComponent from './SpaceComponent';
+import TextComponent from './TextComponent';
 
 interface dataChoise {
-  key: string,
-  title: string,
-  icon: ReactNode,
+  key: string;
+  title: string;
+  icon: ReactNode;
 }
-
 
 interface Props {
-  onchage: (val: string|ImageOrVideo) => void;
-  data:dataChoise[] , 
-  style?:StyleProp<ViewStyle> , 
-  lable:string
+  onchage: (val: string | ImageOrVideo) => void;
+  data: dataChoise[];
+  style?: StyleProp<ViewStyle>;
+  lable: string;
 }
 
-const ChoiseImageComponent = ({onchage , data , style ,lable}: Props) => {
+const ChoiseImageComponent = ({onchage, data, style, lable}: Props) => {
   const [isShowModalize, setisShowModalize] = useState(false);
   const [showmodalImageUrl, setshowmodalImageUrl] = useState(false);
   const [dataImage, setdataImage] = useState<string>('');
@@ -50,21 +55,23 @@ const ChoiseImageComponent = ({onchage , data , style ,lable}: Props) => {
           height: 400,
           cropping: true,
           mediaType: 'photo',
-        }).then(image => {
-          setisShowModalize(false)
-          onchage(image);
-        }).catch(Error =>console.log(Error) );
-      
+        })
+          .then(image => {
+            setisShowModalize(false);
+            onchage(image);
+          })
+          .catch(Error => console.log(Error));
+
         break;
       case 'libary':
         ImageCropPicker.openPicker({
           mediaType: 'photo',
-        }).then(image => {
-          setisShowModalize(false)
-          onchage(image);
-        }).catch(Error =>console.log(Error) )
-
-        ;
+        })
+          .then(image => {
+            setisShowModalize(false);
+            onchage(image);
+          })
+          .catch(Error => console.log(Error));
         break;
       default:
         setshowmodalImageUrl(!showmodalImageUrl);
@@ -87,7 +94,7 @@ const ChoiseImageComponent = ({onchage , data , style ,lable}: Props) => {
     );
   };
   return (
-    <View style = {[style]}>
+    <View style={[style]}>
       <TouchableOpacity onPress={() => setisShowModalize(!isShowModalize)}>
         <TextComponent text={lable} />
       </TouchableOpacity>

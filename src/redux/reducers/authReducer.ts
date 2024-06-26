@@ -4,12 +4,12 @@ import {RootState} from '../store';
 export interface AuthState {
   email: string;
   iduser: string;
-  token: string; 
-  isUpdated:boolean , 
-  name:string,
-  photo:string , 
-  familyName:string , 
-  givenName :string
+  token: string;
+  isUpdated: boolean;
+  name: string;
+  photo: string;
+  familyName: string;
+  givenName: string;
 }
 
 const initialState: AuthState = {
@@ -20,7 +20,7 @@ const initialState: AuthState = {
   name: '',
   photo: '',
   familyName: '',
-  givenName: ''
+  givenName: '',
 };
 
 export const authSlide = createSlice({
@@ -32,13 +32,12 @@ export const authSlide = createSlice({
     addAuth: (state, action: PayloadAction<AuthState>) => {
       state.dataAuth = action.payload;
     },
-    removeAuth:(state)=>{
-        state.dataAuth = initialState
-    }
+    removeAuth: state => {
+      state.dataAuth = initialState;
+    },
   },
 });
 
-export const {addAuth , removeAuth} = authSlide.actions;
+export const {addAuth, removeAuth} = authSlide.actions;
 
 export default authSlide.reducer;
-

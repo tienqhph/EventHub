@@ -1,14 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import {HambergerMenu, Notification, SearchNormal1} from 'iconsax-react-native';
 import React, {useEffect, useState} from 'react';
 import {
-  Image,
+  ActivityIndicator,
   ImageBackground,
   ScrollView,
   StatusBar,
   TouchableOpacity,
   View,
 } from 'react-native';
+import Geocoder from 'react-native-geocoding';
 import GetLocation from 'react-native-get-location';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -19,43 +21,39 @@ import RowComponent from '../../components/RowComponent';
 import TextComponent from '../../components/TextComponent';
 import {appColors} from '../../constants/appColors';
 import {fonts} from '../../constants/fontFamily';
+import {AdressModel} from '../../models/AdressModel';
 import {AppDispatch, RootState} from '../../redux/store';
 import FilterDataComponent from './components/FilterDataComponent';
 import UpcomingEventsComponent from './components/UpcomingEventsComponent';
 import {styleHome} from './stylehome';
-import ButtonComponent from '../../components/ButtonComponent';
-import axios from 'axios';
-import {AdressModel} from '../../models/AdressModel';
-import Geocoder from 'react-native-geocoding';
 
 Geocoder.init('AIzaSyBHcsobecROerAYEpmy0UnYgsyq4orC5dE');
 const HomeScreen = ({navigation}: any) => {
   const dispach = useDispatch<AppDispatch>();
   const data = useSelector((state: RootState) => state.authReducer.dataAuth);
   const [datastorage, setdataStorage] = useState<any>();
-  const [datalocation, setdatalocation] = useState<{latitude:number ,longitude:number }>();
+  const [datalocation, setdatalocation] = useState<{
+    latitude: number;
+    longitude: number;
+  }>();
   const [dataadress, setdataadress] = useState<AdressModel>();
 
   useEffect(() => {
     getdataFromStorage();
- 
   }, []);
 
   useEffect(() => {
     console.log('data res Login with google', data);
   }, [data]);
   useEffect(() => {
-    
-    handleSaveLatAndLong()
-    
+    handleSaveLatAndLong();
   }, [datalocation]);
 
-
-  const handleSaveLatAndLong = async() =>{
-  if(datalocation){
-    await AsyncStorage.setItem('datalocation' ,JSON.stringify(datalocation))
-  }
-  }
+  const handleSaveLatAndLong = async () => {
+    if (datalocation) {
+      await AsyncStorage.setItem('datalocation', JSON.stringify(datalocation));
+    }
+  };
   const getdataFromStorage = async () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -63,16 +61,18 @@ const HomeScreen = ({navigation}: any) => {
     })
       .then(location => {
         console.log('location', location);
-        location&&setdatalocation({latitude:location.latitude , longitude:location.longitude})
+
+        location &&
+          setdatalocation({
+            latitude: location.latitude,
+            longitude: location.longitude,
+          });
         hadleReverseGeolocation(location.latitude, location.longitude);
-        
       })
       .catch(error => {
-        const {code, message} = error;
-        console.warn(code, message);
+        console.log(error);
       });
-     
-   
+
     const datastorage: any = await AsyncStorage.getItem('auth');
 
     const dataparse = datastorage != null ? JSON.parse(datastorage) : null;
@@ -96,11 +96,11 @@ const HomeScreen = ({navigation}: any) => {
     console.log(data);
   };
 
-  const dataEvent = {
+  const dataEvent: EventModel = {
     title: 'International Band Music Concert',
     uids: ['dsfdsij', 'dsfjdisf'],
-    date: '14 December, 2021',
-    time: 'Tuesday, 4:00PM - 9:00PM',
+    date: new Date(),
+    startAt: new Date(),
     location: {
       title: 'Gala Convention Center',
       adress: '36 Guild Street London, UK ',
@@ -108,6 +108,13 @@ const HomeScreen = ({navigation}: any) => {
     description: 'mô tả ',
     authorId: '',
     imgUrl: '',
+    category: '',
+    endAt: new Date(),
+    position: {
+      latitude: 0,
+      longitude: 0,
+    },
+    price: 0,
   };
   return (
     <View style={{flex: 1}}>
@@ -136,14 +143,18 @@ const HomeScreen = ({navigation}: any) => {
                 <AntDesign name="caretdown" size={10} color="white" />
               </TouchableOpacity>
             </RowComponent>
-            <TextComponent
-              text={
-                dataadress?.items[0].address.district +
-                  ',' +
-                  dataadress?.items[0].address.countryName ?? ''
-              }
-              color="white"
-            />
+            {dataadress ? (
+              <TextComponent
+                text={
+                  dataadress?.items[0].address.district +
+                    ',' +
+                    dataadress?.items[0].address.countryName ?? ''
+                }
+                color="white"
+              />
+            ) : (
+              <ActivityIndicator />
+            )}
           </View>
           <View
             style={{

@@ -1,16 +1,16 @@
-import {View, Text, TouchableOpacity, Image} from 'react-native';
-import React, {ReactNode, useEffect, useRef, useState} from 'react';
-import {style} from '../styles/globalStyle';
-import TextComponent from './TextComponent';
-import RowComponent from './RowComponent';
-import {ArrowCircleDown, ArrowDown, ArrowDown2} from 'iconsax-react-native';
-import {Portal} from 'react-native-portalize';
-import {Modalize} from 'react-native-modalize';
+import { ArrowCircleDown } from 'iconsax-react-native';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import { Image, TouchableOpacity, View } from 'react-native';
+import { Modalize } from 'react-native-modalize';
+import { Portal } from 'react-native-portalize';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {appColors} from '../constants/appColors';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {icon} from '../constants/const';
+import { appColors } from '../constants/appColors';
+import { icon } from '../constants/const';
+import { style } from '../styles/globalStyle';
+import RowComponent from './RowComponent';
+import TextComponent from './TextComponent';
 interface Props {
   dataselect: string;
   onSlected: (val: string) => void;
@@ -32,7 +32,7 @@ const dataCategory = [
   {
     key: 'music',
     icon: <FontAwesome name="music" size={20} color={appColors.gray} />,
-    title: 'Music ',
+    title: 'Music',
   },
   {
     key: 'food',

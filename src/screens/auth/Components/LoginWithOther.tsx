@@ -1,29 +1,25 @@
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-} from '@react-native-google-signin/google-signin';
-import {useNavigation} from '@react-navigation/native';
-import React, {useEffect} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
-import ButtonComponent from '../../../components/ButtonComponent';
-import TextComponent from '../../../components/TextComponent';
-import {appColors} from '../../../constants/appColors';
-import {iconApp} from '../../../constants/const';
-import {fonts} from '../../../constants/fontFamily';
-import {RootStack} from '../../../navigators/typechecking/TypeChecking';
-import authenticationApi from '../../../apis/authApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch, RootState} from '../../../redux/store';
-import {addAuth} from '../../../redux/reducers/authReducer';
 import {
-  Settings,
-  LoginButton,
-  AccessToken,
+  GoogleSignin
+} from '@react-native-google-signin/google-signin';
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import {
   LoginManager,
   Profile,
+  Settings
 } from 'react-native-fbsdk-next';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import authenticationApi from '../../../apis/authApi';
+import ButtonComponent from '../../../components/ButtonComponent';
+import TextComponent from '../../../components/TextComponent';
+import { appColors } from '../../../constants/appColors';
+import { iconApp } from '../../../constants/const';
+import { fonts } from '../../../constants/fontFamily';
+import { RootStack } from '../../../navigators/typechecking/TypeChecking';
+import { addAuth } from '../../../redux/reducers/authReducer';
+import { AppDispatch } from '../../../redux/store';
 
 GoogleSignin.configure({
   webClientId:
@@ -36,12 +32,11 @@ interface Props {
 
 const LoginWithOther = ({text}: Props) => {
   const navigation = useNavigation<RootStack>();
- 
+
   const dispatch = useDispatch<AppDispatch>();
   const _gotoSignup = () => {
     navigation.navigate('SignupScreen');
   };
-
 
   const _gotoSignIn = () => {
     navigation.navigate('LoginScreen');
