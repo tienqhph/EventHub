@@ -1,6 +1,6 @@
 export const fonts = {
-    regular :'AirbnbCereal_W_Lt',
-    medium:'AirbnbCereal_W_Md' , 
-    semiBold:'AirbnbCereal_W_Bk',
-     bold:'AirbnbCereal_W_Bd'
-}
+  regular: 'AirbnbCereal_W_Lt',
+  medium: 'AirbnbCereal_W_Md',
+  semiBold: 'AirbnbCereal_W_Bk',
+  bold: 'AirbnbCereal_W_Bd',
+};

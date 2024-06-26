@@ -1,30 +1,27 @@
-import {View, Text, StatusBar, Image} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import InputComponent from '../../components/InputComponent';
-import ContainerComponent from '../../components/ContainerComponent';
-import ButtonComponent from '../../components/ButtonComponent';
-import {fonts} from '../../constants/fontFamily';
-import ChoiseLocation from './components/ChoiseLocation';
-import RowComponent from '../../components/RowComponent';
-import DateTimePickerComponent from '../../components/DateTimePickerComponent';
-import SpaceComponent from '../../components/SpaceComponent';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../redux/store';
-import ApiEvent from '../../apis/eventApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import storage from '@react-native-firebase/storage';
+import { useNavigation } from '@react-navigation/native';
+import { Camera, Folder2, Link } from 'iconsax-react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, StatusBar } from 'react-native';
+import { useSelector } from 'react-redux';
 import authenticationApi from '../../apis/authApi';
+import EventApi from '../../apis/eventApi';
+import ButtonComponent from '../../components/ButtonComponent';
+import ChoiseCategoryComponent from '../../components/ChoiseCategoryComponent';
+import ChoiseImageComponent from '../../components/ChoiseImageComponent';
+import ContainerComponent from '../../components/ContainerComponent';
+import DateTimePickerComponent from '../../components/DateTimePickerComponent';
 import DropDownComponent, {
   Userselect,
 } from '../../components/DropDownComponent';
-import ChoiseImageComponent from '../../components/ChoiseImageComponent';
-import {appInfor} from '../../constants/const';
-import {Camera, Folder2, Link} from 'iconsax-react-native';
-import {style} from '../../styles/globalStyle';
-import ChoiseCategoryComponent from '../../components/ChoiseCategoryComponent';
-import storage from '@react-native-firebase/storage';
-import EventApi from '../../apis/eventApi';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import InputComponent from '../../components/InputComponent';
+import RowComponent from '../../components/RowComponent';
+import SpaceComponent from '../../components/SpaceComponent';
+import { fonts } from '../../constants/fontFamily';
 import { RootStack } from '../../navigators/typechecking/TypeChecking';
+import { RootState } from '../../redux/store';
+import ChoiseLocation from './components/ChoiseLocation';
 const dataEventInit = {
   title: '',
   uids: [],
@@ -32,7 +29,7 @@ const dataEventInit = {
   startAt: new Date(),
   endAt: new Date(),
   location: {
-    title: '',
+    titleadress: '',
     adress: '',
   },
   description: '',
@@ -41,29 +38,33 @@ const dataEventInit = {
   imgUrl: '',
   category: '',
   position: {
-    latidue: 0,
-    longtidue: 0,
+    latitude: 0,
+    longitude: 0,
   },
 };
-
 const AddEventScreen = () => {
   const [dataEvent, setdataEvent] = useState(dataEventInit);
-  const navigation = useNavigation<RootStack>()
+  const navigation = useNavigation<RootStack>();
   const datauser = useSelector(
     (state: RootState) => state.authReducer.dataAuth,
   );
-  const [dataUser, setdataUser] = useState<Userselect[]>([]);
-  useEffect(() => {
-     getData()
 
+  const [dataUser, setdataUser] = useState<Userselect[]>([]);
+
+  useEffect(() => {
+    handleGetlocationEvnt();
+  }, [dataEvent.location.adress]);
+
+  useEffect(() => {
+    getData();
   }, []);
   const getData = async () => {
     try {
-      const data = await AsyncStorage.getItem('auth')
+      const data = await AsyncStorage.getItem('auth');
 
-      if(data){
-        const  dataparse = JSON.parse(data)
-        hanleChangeValue('authorId' ,dataparse.data.iduser)
+      if (data) {
+        const dataparse = JSON.parse(data);
+        hanleChangeValue('authorId', dataparse.data.iduser);
       }
     } catch (e) {
       // error reading value
@@ -72,6 +73,15 @@ const AddEventScreen = () => {
   useEffect(() => {
     handleGetAllUser();
   }, []);
+  const handleGetlocationEvnt = async () => {
+    const data = await AsyncStorage.getItem('locationevent');
+    if (data) {
+      const reversedata = JSON.parse(data);
+
+      console.log(reversedata);
+      hanleChangeValue('position', reversedata);
+    }
+  };
   const handleGetAllUser = async () => {
     try {
       const res = await authenticationApi.handleAuthentication(
@@ -93,19 +103,19 @@ const AddEventScreen = () => {
   };
 
   const handleAddnewEvent = async () => {
- 
-     try {
-      const res = await EventApi.handleEventApi('/addevent' ,dataEvent , 'post')
-      console.log(res)
-     if(res){
-      navigation.navigate('ExploreScreen')
-     }
-     } catch (error) {  
-      console.log(error)
-      
-     }
-
+    console.log(dataEvent);
+    try {
+      const res = await EventApi.handleEventApi('/addevent', dataEvent, 'post');
+      console.log(res);
+      if (res) {
+        navigation.navigate('ExploreScreen');
+        setdataEvent(dataEventInit);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   const dataChoiseSlectImage = [
     {
       key: 'camera',
@@ -191,9 +201,12 @@ const AddEventScreen = () => {
       />
       <InputComponent
         onChange={val =>
-          hanleChangeValue('location', {...dataEvent.location, title: val})
+          hanleChangeValue('location', {
+            ...dataEvent.location,
+            titleadress: val,
+          })
         }
-        value={dataEvent.location.title}
+        value={dataEvent.location.titleadress}
         pleaceHolder="title adress"
       />
       <InputComponent
@@ -219,10 +232,18 @@ const AddEventScreen = () => {
         onchange={val => hanleChangeValue('date', val)}
       />
       <ChoiseLocation
-        onchange={val => hanleChangeValue('location', val)}
-        onchaneLatandLong={val => hanleChangeValue('position', val)}
+        value={
+          dataEvent.location.adress.length > 0
+            ? dataEvent.location.adress
+            : 'choiseYour location'
+        }
+        onchange={val => {
+          if (typeof val === 'string') {
+            hanleChangeValue('location', {...dataEvent.location, adress: val});
+          }
+        }}
+        onchaneLatandLong={val => console.log(val)}
       />
-
       <DropDownComponent
         onselected={val => hanleChangeValue('uids', val)}
         dataconfirm={dataEvent.uids}

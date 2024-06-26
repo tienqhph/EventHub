@@ -1,29 +1,24 @@
-import {
-  View,
-  Text,
-  Modal,
-  StatusBar,
-  TouchableOpacity,
-  FlatList,
-  StyleSheet,
-} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import InputComponent from '../components/InputComponent';
-import {
-  SearchFavorite,
-  SearchNormal,
-  SearchNormal1,
-} from 'iconsax-react-native';
-import RowComponent from '../components/RowComponent';
-import ButtonComponent from '../components/ButtonComponent';
-import axios, {Axios} from 'axios';
-import {LocationModel} from '../models/LoactionModel';
-import TextComponent from '../components/TextComponent';
-import Mapview, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
-import {appInfor} from '../constants/const';
-import GetLocation from 'react-native-get-location';
-import {fonts} from '../constants/fontFamily';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {
+  SearchNormal1
+} from 'iconsax-react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  FlatList,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import Mapview, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import ButtonComponent from '../components/ButtonComponent';
+import InputComponent from '../components/InputComponent';
+import RowComponent from '../components/RowComponent';
+import TextComponent from '../components/TextComponent';
+import { appInfor } from '../constants/const';
+import { fonts } from '../constants/fontFamily';
+import { LocationModel } from '../models/LoactionModel';
 interface Props {
   isvisibal: boolean;
   onclose?: () => void;
@@ -138,6 +133,13 @@ const LocationModal = ({
           height: appInfor.sizes.HEIGHT,
           position: 'absolute',
         }}
+        onPress={item => {
+          console.log(item.nativeEvent.coordinate);
+          setlocationMarker({
+            latitude: item.nativeEvent.coordinate.latitude,
+            longitude: item.nativeEvent.coordinate.longitude,
+          });
+        }}
         region={{
           latitude: locationMarker ? locationMarker.latitude : 21.0518641,
           longitude: locationMarker ? locationMarker.longitude : 105.7425046,
@@ -214,9 +216,13 @@ const LocationModal = ({
           padding: 20,
         }}>
         <ButtonComponent
-          onPress={() => {
+          onPress={async () => {
             onchange(dataAdress);
             if (locationMarker) {
+              await AsyncStorage.setItem(
+                'locationevent',
+                JSON.stringify(locationMarker),
+              );
               onchangeLatandLong({
                 latidue: locationMarker.latitude,
                 longtidue: locationMarker.longitude,

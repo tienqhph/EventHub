@@ -1,10 +1,5 @@
 import React, { ReactNode } from 'react';
-import {
-  StyleProp,
-  TextStyle,
-  TouchableOpacity,
-  ViewStyle
-} from 'react-native';
+import { StyleProp, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
 import { appColors } from '../constants/appColors';
 import { fonts } from '../constants/fontFamily';
 import { style } from '../styles/globalStyle';
@@ -18,11 +13,11 @@ interface Props {
   styles?: StyleProp<ViewStyle>;
   textColor?: string;
   textStyle?: StyleProp<TextStyle>;
-  onPress?: ()=>void ;
+  onPress?: () => void;
   flexIcon?: 'reight' | 'left';
-  disable?:boolean , 
-  afix ?:ReactNode , 
-  prefix?:ReactNode
+  disable?: boolean;
+  afix?: ReactNode;
+  prefix?: ReactNode;
 }
 const ButtonComponent = (props: Props) => {
   const {
@@ -35,22 +30,41 @@ const ButtonComponent = (props: Props) => {
     styles,
     color,
     flexIcon,
-    disable , 
-    afix , prefix
+    disable,
+    afix,
+    prefix,
   } = props;
-  return  type === 'primary' ?
-    <TouchableOpacity disabled={disable} style = {[style.button , {backgroundColor:disable?appColors.gray:color??appColors.primary , } , styles]} onPress={onPress}>
+  return type === 'primary' ? (
+    <TouchableOpacity
+      disabled={disable}
+      style={[
+        style.button,
+        {
+          backgroundColor: disable
+            ? appColors.gray
+            : color ?? appColors.primary,
+        },
+        styles,
+      ]}
+      onPress={onPress}>
+      {icon && flexIcon === 'left' ? icon : <></>}
+      <TextComponent
+        text={text}
+        color={textColor}
+        styles={textStyle}
+        font={fonts.regular}
+      />
 
-        {icon && flexIcon ==='left' ? icon:<></>}
-      <TextComponent text={text} color={textColor} styles={textStyle} font={fonts.regular} />
-      
-      {icon && flexIcon ==='reight' && icon}
+      {icon && flexIcon === 'reight' && icon}
     </TouchableOpacity>
-
-    :<TouchableOpacity onPress={onPress} style = {styles}>
-        <TextComponent text={text} color={type ==='link'? appColors.primary :appColors.text}/>
+  ) : (
+    <TouchableOpacity onPress={onPress} style={styles}>
+      <TextComponent
+        text={text}
+        color={type === 'link' ? appColors.primary : appColors.text}
+      />
     </TouchableOpacity>
-
+  );
 };
 
 export default ButtonComponent;

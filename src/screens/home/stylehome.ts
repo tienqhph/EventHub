@@ -23,5 +23,9 @@ export const styleHome = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#ffffff66',
   },
-   containerButtonFilter :{backgroundColor:'#ffffff1a' , borderRadius:20 , padding:6}
+  containerButtonFilter: {
+    backgroundColor: '#ffffff1a',
+    borderRadius: 20,
+    padding: 6,
+  },
 });

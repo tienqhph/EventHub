@@ -1,36 +1,25 @@
-import {View, Text, Image} from 'react-native';
-import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NAME_SCREENS} from '../constants/nameNavigator';
-import {HomeScreen} from '../screens';
-import ExpolerScreen from '../screens/expoler/ExpolerScreen';
-import AddEventScreen from '../screens/addevvents/AddEventScreen';
-import MapScreens from '../screens/map/MapScreens';
-import ProfileScreen from '../screens/profile/ProfileScreen';
-import IconBottomTab from '../components/IconBottomTab';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
-  Add,
-  Additem,
-  BoxAdd,
   Calendar,
   Home,
-  Map,
   Map1,
-  Profile,
+  Profile
 } from 'iconsax-react-native';
-import {icon} from '../constants/const';
-import ExpolerNavigator from './ExpolerNavigator';
+import React from 'react';
+import { Image, Text, View } from 'react-native';
+import { icon } from '../constants/const';
+import { NAME_SCREENS } from '../constants/nameNavigator';
+import AddEventScreen from '../screens/addevvents/AddEventScreen';
 import EventsNavigator from './EventsNavigator';
+import ExpolerNavigator from './ExpolerNavigator';
 import MapNavigator from './MapNavigator';
 import ProfileNavigator from './ProfileNavigator';
-import EventScreen from '../screens/events/EventScreen';
 
 const TabNavigator = ({navigation}: any) => {
   const BottomTab = createBottomTabNavigator();
   return (
     <BottomTab.Navigator
-    
-      screenOptions={({ route, navigation }) => ({
+      screenOptions={({route, navigation}) => ({
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
@@ -47,9 +36,8 @@ const TabNavigator = ({navigation}: any) => {
         tabBarIconStyle: {
           alignItems: 'center',
           justifyContent: 'center',
-        } , 
-        tabBarHideOnKeyboard:true
-  
+        },
+        tabBarHideOnKeyboard: true,
       })}>
       <BottomTab.Screen
         name={NAME_SCREENS.EXPOLER_SCREEN}
@@ -79,12 +67,27 @@ const TabNavigator = ({navigation}: any) => {
         name={NAME_SCREENS.ADDEVENT_SCREEN}
         component={AddEventScreen}
         options={{
-          tabBarIcon :({focused , color , size})=><View style = {{ flex:1,alignItems:'center' , justifyContent:'flex-start' , top:-25}}>
-                 <View style = {{alignItems:'center' , justifyContent:'center' , width:50 , height:50 ,borderRadius:25, backgroundColor:'#5669FF'}}>
-                    <Image  source={icon.add_box}style ={{width:24 , height:24}} />
-                 </View>
-                 
-          </View>
+          tabBarIcon: ({focused, color, size}) => (
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                top: -25,
+              }}>
+              <View
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 50,
+                  height: 50,
+                  borderRadius: 25,
+                  backgroundColor: '#5669FF',
+                }}>
+                <Image source={icon.add_box} style={{width: 24, height: 24}} />
+              </View>
+            </View>
+          ),
         }}
       />
       <BottomTab.Screen
