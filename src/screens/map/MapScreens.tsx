@@ -58,12 +58,7 @@ const MapScreens = () => {
       });
   }, []);
 
-  useEffect(() => {
-    handleGetData();
-  }, []);
-  useEffect(() => {
-    console.log("data category" , dataCategory)
-  }, [dataCategory]);
+  
   const handleGetData = async () => {
     console.log(curruntLocation);
     try {
