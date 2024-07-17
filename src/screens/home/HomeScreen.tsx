@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Geocoder from 'react-native-geocoding';
+
 import GetLocation from 'react-native-get-location';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -26,12 +26,14 @@ import {AppDispatch, RootState} from '../../redux/store';
 import FilterDataComponent from './components/FilterDataComponent';
 import UpcomingEventsComponent from './components/UpcomingEventsComponent';
 import {styleHome} from './stylehome';
+import ApiEvent from '../../apis/eventApi';
 
-Geocoder.init('AIzaSyBHcsobecROerAYEpmy0UnYgsyq4orC5dE');
+
 const HomeScreen = ({navigation}: any) => {
   const dispach = useDispatch<AppDispatch>();
   const data = useSelector((state: RootState) => state.authReducer.dataAuth);
   const [datastorage, setdataStorage] = useState<any>();
+  const [dataEventUpcoming, setdataEventUpcoming] = useState<EventModel[]>([]);
   const [datalocation, setdatalocation] = useState<{
     latitude: number;
     longitude: number;
@@ -40,10 +42,10 @@ const HomeScreen = ({navigation}: any) => {
 
   useEffect(() => {
     getdataFromStorage();
+    getDataEventHub()
   }, []);
-
   useEffect(() => {
-    console.log('data res Login with google', data);
+  
   }, [data]);
   useEffect(() => {
     handleSaveLatAndLong();
@@ -54,19 +56,28 @@ const HomeScreen = ({navigation}: any) => {
       await AsyncStorage.setItem('datalocation', JSON.stringify(datalocation));
     }
   };
+
+  const getDataEventHub = async()=>{
+    const  url = '/getdataEventUpcoming'
+    const res = await ApiEvent.handleEventApi(url ,{} , 'get')
+
+    if(res){
+
+      setdataEventUpcoming(res.data)
+    }
+  }
   const getdataFromStorage = async () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 60000,
     })
       .then(location => {
-        console.log('location', location);
-
         location &&
           setdatalocation({
             latitude: location.latitude,
             longitude: location.longitude,
           });
+         
         hadleReverseGeolocation(location.latitude, location.longitude);
       })
       .catch(error => {
@@ -74,9 +85,9 @@ const HomeScreen = ({navigation}: any) => {
       });
 
     const datastorage: any = await AsyncStorage.getItem('auth');
-
     const dataparse = datastorage != null ? JSON.parse(datastorage) : null;
   };
+  
   const hadleReverseGeolocation = async (lat: number, long: number) => {
     try {
       await axios(
@@ -95,6 +106,8 @@ const HomeScreen = ({navigation}: any) => {
   const handleFilter = (data: any) => {
     console.log(data);
   };
+
+
 
   const dataEvent: EventModel = {
     title: 'International Band Music Concert',
@@ -221,18 +234,18 @@ const HomeScreen = ({navigation}: any) => {
           onpress={() => console.log('see all')}
         />
 
-        <ItemEventsComponent dataEvent={dataEvent} />
+        <ItemEventsComponent dataEvent={dataEventUpcoming} />
 
-        <View style={{paddingTop: 20, paddingHorizontal: 20}}>
+        <View style={{paddingHorizontal:20 , paddingTop:20}}>
           <ImageBackground
             source={require('./../../assets/images/bg_invite.png')}
             style={{
-              padding: 10,
               width: '100%',
               height: 127,
               justifyContent: 'space-evenly',
             }}
             borderRadius={20}>
+            <View style = {{padding:12 , justifyContent:'space-evenly' ,height:'100%' }}>
             <TextComponent text="Invite your friends" />
             <TextComponent text="Get $20 for ticket" font={fonts.regular} />
             <TouchableOpacity
@@ -246,15 +259,12 @@ const HomeScreen = ({navigation}: any) => {
               }}>
               <TextComponent text="INVITE" color="white" />
             </TouchableOpacity>
+            </View>
           </ImageBackground>
         </View>
-        <NearYouItemComponent
-          address="36 Guild Street London, UK "
-          time="1st  May- Sat -2:00 PM"
-          image=""
-          isBookmark
-          title="International Band Music Concert"
-        />
+      {datalocation?  <NearYouItemComponent
+         curruntLocation={datalocation}
+        />:<ActivityIndicator/>}
       </ScrollView>
     </View>
   );

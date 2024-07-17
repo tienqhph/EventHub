@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBRWFZ3nLkDK5XHtaLgU9WQ8d01w8pw9_4"
+          "current_key": "@string/google_maps_key"
         }
       ],
       "services": {
