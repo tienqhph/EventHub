@@ -20,7 +20,9 @@ type RootStackParamList = {
         id: string;
       };
   HomeDrawerScreen: undefined;
-  DetailScreen: undefined;
+  DetailScreen: undefined |{
+    item:EventModel
+  };
   HomeScreen: undefined;
   ExploreScreen: undefined;
 };
@@ -42,4 +44,8 @@ export type PropsRouteVerification = RouteProp<
 export type PropsRouteNewPass = RouteProp<
   RootStackParamList,
   NAME_SCREENS.NEWPASSWORD_SCREEN
+>;
+export type PropsRouteDetailScreen = RouteProp<
+  RootStackParamList,
+  NAME_SCREENS.DETAIL_SCREEN
 >;

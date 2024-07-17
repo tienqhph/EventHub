@@ -25,8 +25,16 @@ export const appInfor = {
     WIDTH: Dimensions.get('window').width,
     HEIGHT: Dimensions.get('window').height,
   },
-
-  URL: 'http://192.168.30.115:3001',
+  weekName: [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ],
+  URL: 'http://10.215.22.44:3001',
   month: [
     'January',
     'February ',

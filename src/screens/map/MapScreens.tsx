@@ -1,10 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
-import {
-  ArrowLeft2,
-  Bookmark,
-  Location
-} from 'iconsax-react-native';
-import React, { useEffect, useState } from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {ArrowLeft2, Bookmark, Location} from 'iconsax-react-native';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -16,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import GetLocation from 'react-native-get-location';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -26,11 +22,11 @@ import InputComponent from '../../components/InputComponent';
 import RowComponent from '../../components/RowComponent';
 import SpaceComponent from '../../components/SpaceComponent';
 import TextComponent from '../../components/TextComponent';
-import { appColors } from '../../constants/appColors';
-import { appInfor, icon } from '../../constants/const';
-import { fonts } from '../../constants/fontFamily';
-import { RootStack } from '../../navigators/typechecking/TypeChecking';
-import { GetDateTime } from '../../utils/getTime';
+import {appColors} from '../../constants/appColors';
+import {appInfor, icon} from '../../constants/const';
+import {fonts} from '../../constants/fontFamily';
+import {RootStack} from '../../navigators/typechecking/TypeChecking';
+import {GetDateTime} from '../../utils/getTime';
 import FilterDataComponent from '../home/components/FilterDataComponent';
 const MapScreens = () => {
   const navigation = useNavigation<RootStack>();
@@ -42,6 +38,8 @@ const MapScreens = () => {
   const [dataEventByDistance, setdataEventByDistance] = useState<EventModel[]>(
     [],
   );
+
+  const [dataCategory, setdataCategory] = useState('');
   useEffect(() => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -59,6 +57,13 @@ const MapScreens = () => {
         console.warn(code, message);
       });
   }, []);
+
+  useEffect(() => {
+    handleGetData();
+  }, []);
+  useEffect(() => {
+    console.log("data category" , dataCategory)
+  }, [dataCategory]);
   const handleGetData = async () => {
     console.log(curruntLocation);
     try {
@@ -287,7 +292,7 @@ const MapScreens = () => {
       </View>
       <View style={{paddingLeft: 20}}>
         <FilterDataComponent
-          onpress={val => console.log('', val)}
+          onpress={val => setdataCategory(val)}
           textcolor="gray"
           coloricon
           bgcolorcolor={appColors.white}
